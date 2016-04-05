@@ -1,0 +1,28 @@
+extends ../layout
+block title
+    title= 'Authentication Example'
+block stylesheets
+    style.
+        body {
+            padding: 50px;
+            font: 13px Helvetica, Arial, sans-serif;
+        }
+        .error {
+            color: red
+        }
+        .success {
+            color: green;
+        }
+block content
+    h1 Login
+    = message
+    Try accessing <a href="/auth/restricted">/restricted</a>, then authenticate with "cai" and "caicai".
+    form(method='post', action='/auth/login')
+        p
+            label Username:
+            input(type='text', name='username')
+        p
+            label Password:
+            input(type='password', name='password')
+        p
+            input(type='submit', value='Login')
