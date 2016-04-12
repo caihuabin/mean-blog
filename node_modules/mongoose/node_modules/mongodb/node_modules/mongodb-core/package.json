@@ -1,0 +1,74 @@
+{
+  "name": "mongodb-core",
+  "version": "1.3.16",
+  "description": "Core MongoDB driver functionality, no bells and whistles and meant for integration not end applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/runner.js -t functional",
+    "coverage": "nyc node test/runner.js -t functional -l && node_modules/.bin/nyc report --reporter=text-lcov | node_modules/.bin/coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/christkv/mongodb-core.git"
+  },
+  "keywords": [
+    "mongodb",
+    "core"
+  ],
+  "dependencies": {
+    "bson": "~0.4.21",
+    "require_optional": "~1.0.0"
+  },
+  "devDependencies": {
+    "co": "4.5.4",
+    "coveralls": "^2.11.6",
+    "es6-promise": "^3.0.2",
+    "gleak": "0.5.0",
+    "integra": "0.1.8",
+    "jsdoc": "3.3.0-alpha8",
+    "mkdirp": "0.5.0",
+    "mongodb-topology-manager": "1.0.x",
+    "mongodb-version-manager": "^1.x",
+    "nyc": "^5.5.0",
+    "optimist": "latest",
+    "rimraf": "2.2.6",
+    "semver": "4.1.0"
+  },
+  "peerOptionalDependencies": {
+    "kerberos": "~0.0"
+  },
+  "author": {
+    "name": "Christian Kvalheim"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/christkv/mongodb-core/issues"
+  },
+  "homepage": "https://github.com/christkv/mongodb-core",
+  "gitHead": "146d614c91c10a305a105d0d16387baa586c5fe1",
+  "_id": "mongodb-core@1.3.16",
+  "_shasum": "6f9905bc7be0c890333a011d0313e5f0e2769a3b",
+  "_from": "mongodb-core@1.3.16",
+  "_npmVersion": "2.15.0",
+  "_nodeVersion": "4.4.2",
+  "_npmUser": {
+    "name": "christkv",
+    "email": "christkv@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "christkv",
+      "email": "christkv@gmail.com"
+    }
+  ],
+  "dist": {
+    "shasum": "6f9905bc7be0c890333a011d0313e5f0e2769a3b",
+    "tarball": "https://registry.npmjs.org/mongodb-core/-/mongodb-core-1.3.16.tgz"
+  },
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/mongodb-core-1.3.16.tgz_1460061507000_0.856263784924522"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/mongodb-core/-/mongodb-core-1.3.16.tgz"
+}

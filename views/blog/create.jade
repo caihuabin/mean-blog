@@ -1,0 +1,26 @@
+div.container
+    section.page
+        header.page-header
+        section.page-content
+            form.pure-form.pure-form-aligned(method='post', name='postForm', ng-controller="BlogCreateCtrl", ng-submit='save()', novalidate)
+                fieldset
+                    .pure-control-group
+                        label(for='title') Title
+                        input.pure-input-2-3(type='text', name='title', placeholder='Title', ng-model='post.title', required)
+                        span(style='color:red', ng-show='postForm.title.$dirty && postForm.title.$invalid')
+                            span(ng-show='postForm.title.$error.required') 标题是必须的.
+                    .pure-control-group
+                        label(for='alias') Alias
+                        input.pure-input-2-3(type='text', name='alias', placeholder='Alias', ng-model='post.alias', ensure-unique='post.alias', required)
+                        span(style='color:red', ng-show='postForm.alias.$dirty && postForm.alias.$invalid')
+                            span(ng-show='postForm.alias.$error.required') 是必须的.
+                            span(ng-show='postForm.alias.$error.unique') 已存在.
+                    .pure-control-group
+                        label(for='content') Content
+                        textarea.pure-input-2-3(name='content', rows='10', placeholder='Content(markdown)', ng-model='post.content', required)
+                        span(style='color:red', ng-show='postForm.content.$dirty && postForm.content.$invalid')
+                            span(ng-show='postForm.content.$error.required') 是必须的.
+
+                    .pure-controls
+                        input.pure-button.button-large(type='submit', value='Done', ng-disabled='postForm.title.$dirty && postForm.title.$invalid || postForm.content.$dirty && postForm.content.$invalid || postForm.alias.$dirty && postForm.alias.$invalid')
+                    

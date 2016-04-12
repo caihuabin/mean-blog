@@ -1,0 +1,27 @@
+.container
+    section.blog-content
+        header.blog-content-header.pure-g
+            div.pure-u-1-2
+                h1.blog-content-title {{ post.title }}
+                p.blog-content-subtitle
+                    | By 
+                    a.blog-author {{ post.user.username }} 
+                    | at 
+                    span {{ post.createdTime }}
+            div.blog-content-controls.pure-u-1-2
+                button.secondary-button.pure-button Reply
+                button.secondary-button.pure-button Forward
+                button.secondary-button.pure-button Vote
+        section.blog-content-body
+            div.blog
+                p {{ post.content }}
+                p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    nav.slideshow
+        a.nav-prev(ng-click='prev()')
+            span.icon-left-open
+        a.nav-next(ng-click='next()')
+            span.icon-right-open
+        a.nav-close(ng-href='/#/blog')
+            span.icon-cancel
+        a.nav-edit(ng-href='/#/blog/edit/{{post._id}}')
+            span.icon-edit

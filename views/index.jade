@@ -1,4 +1,48 @@
 extends ./layout
 block content
-    h1= title
-    p Welcome to #{title}
+	div#layout
+		a#menuLink.menu-link(href='#menu')
+			span
+		nav#menu
+			div.pure-menu
+				a.pure-menu-heading(ng-href='#') MEAN-BLOG
+				ul.pure-menu-list
+					li.pure-menu-item
+						a.pure-menu-link(ng-href='/#/blog')
+							span.label-light-red
+							| BLOG 
+							span.label-count ( {{ BlogCount ? BlogCount : '^.^' }} )
+					li.pure-menu-item
+						a.pure-menu-link(href='#')
+							span.label-yellow
+							| About
+					li.pure-menu-item.menu-item-divided.pure-menu-selected
+						a.pure-menu-link(href='#')
+							span.label-blue
+							| Services
+					li.pure-menu-item
+						a.pure-menu-link(href='#')
+							span.label-green
+							| Contact
+					li.pure-menu-heading User
+					li.pure-menu-item(ng-if='!!currentUser')
+						a.pure-menu-link
+							span.label-dark-blue
+							| Welcome, {{ currentUser.username }}
+					li.pure-menu-item(ng-if='!!currentUser')
+						a.pure-menu-link(href='/#/auth/logout')
+							span.label-dark-green
+							| Sign Out
+			ul.nav-list
+				li.nav-item
+					a.pure-button(href='/#/auth/login') Sign In
+				li.nav-item
+					a.pure-button(href='/#/auth/register') Sign Up
+		div#main
+			section(id='content', ng-view, class='slide-down')
+			footer(id='info')
+				p Originated by 
+					a(href='https://github.com/icyse') Cai
+				p Modified by 
+					a(href='https://github.com/icyse') Cai
+					|  in Aprl 2016

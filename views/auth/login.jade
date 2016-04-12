@@ -1,28 +1,26 @@
-extends ../layout
-block title
-    title= 'Authentication Example'
-block stylesheets
-    style.
-        body {
-            padding: 50px;
-            font: 13px Helvetica, Arial, sans-serif;
-        }
-        .error {
-            color: red
-        }
-        .success {
-            color: green;
-        }
-block content
-    h1 Login
-    = message
-    Try accessing <a href="/auth/restricted">/restricted</a>, then authenticate with "cai" and "caicai".
-    form(method='post', action='/auth/login')
-        p
-            label Username:
-            input(type='text', name='username')
-        p
-            label Password:
-            input(type='password', name='password')
-        p
-            input(type='submit', value='Login')
+.container
+    section.blog-content
+        header.blog-content-header
+            h1.blog-content-title Login
+            | !{message}
+            | Try accessing 
+            a(ng-href='/#/auth/restricted') /restricted
+            |, or register 
+            a(ng-href='/#/auth/register') /register
+            |,then authenticate with your "username" and "password".
+        section.blog-content-body
+            form.pure-form.pure-form-aligned(method='post', name='loginForm', ng-submit='login(credentials)', novalidate)
+                fieldset
+                    .pure-control-group
+                        label(for='username') Username
+                        input(type='text', name='username', ng-model='credentials.username', required)
+                        span(style='color:red', ng-show='loginForm.username.$dirty && loginForm.username.$invalid')
+                            <span ng-show="loginForm.username.$error.required">用户名是必须的.</span>
+                    .pure-control-group
+                        label(for='password') Password
+                        input(type='password', name='password', ng-model='credentials.password', ng-minlength='6', required)
+                        span(style='color:red', ng-show='loginForm.password.$dirty && loginForm.password.$invalid')
+                            span(ng-show='loginForm.password.$error.required') 密码是必须的.
+                            span(ng-show='loginForm.password.$error.minlength') 不能少于6位字符.
+                    .pure-controls
+                        input.pure-button.button-success(type='submit', value='Login', ng-disabled='loginForm.username.$dirty && loginForm.username.$invalid || loginForm.password.$dirty && loginForm.password.$invalid')

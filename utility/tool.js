@@ -84,15 +84,19 @@ exports.generateKey = function (prefix, obj) {
         key = '';
     for (attr in obj) {
         value = obj[attr];
-        //形如： _name_Tom
-        key += '_' + attr.toString().toLowerCase() + '_' + value.toString()
+        key += attr.toString().toLowerCase() + '_' + value.toString();
     }
     if (prefix) {
         //形如：prefix_name_Tom_age_20
-        key = prefix + key;
-    } else {
-        //形如：name_Tom_age_20
-        key = key.substr(1);
+        key = prefix + '_' + key;
     }
     return key;
+};
+exports.deObject = function (obj, callback) {
+    for(var key in obj){
+        if(obj[key] === undefined || obj[key] === null){
+            delete obj[key];
+        }
+    }
+    return obj;
 };

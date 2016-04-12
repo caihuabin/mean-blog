@@ -1,32 +1,47 @@
 var db = require('./db'),
-    mongoose = db.mongoose,
-    base = db.base;
+    mongoose = db.mongoose;
 
-var postSchema = base.extend({
+var postSchema = new mongoose.Schema({
     //标题
-    Title: {type: String},
+    title: {type: String},
     //文章别名
-    Alias: {type: String},
+    alias: {type: String},
     //摘要
-    Summary: {type: String},
+    summary: {type: String},
     //来源
-    Source: {type: String},
+    source: {type: String},
     //内容
-    Content: {type: String},
+    content: {type: String},
     //图片
-    ImgList: {type: Array},
-    //分类Id
-    CategoryId: {type: String},
+    imgList: {type: Array, default: []},
     //标签
-    Labels: {type: String},
+    labels: {type: String},
     //外链Url
-    Url: {type: String},
+    url: {type: String},
+    //分类
+    category: {type: Object},
+    //user
+    user: {type: Object},
+    //回复
+    replyList: {type: Array, default: []},
+    //
+    voteList: {type: Array, default: []},
     //浏览次数
-    ViewCount: {type: Number},
+    viewCount: {type: Number, default: 0},
+    //
+    replyCount: {type: Number, default: 0},
+    //
+    voteCount: {type: Number, default: 0},
     //是否草稿
-    IsDraft: {type: Boolean},
+    isDraft: {type: Boolean, default: false},
     //是否有效
-    IsActive: {type: Boolean, default: true}
+    isActive: {type: Boolean, default: true},
+    //是否软删除
+    softDelete: {type: Boolean, default: false},
+    //创建时间
+    createdTime: {type: Date, default: Date.now()},
+    //修改时间
+    updatedTime: {type: Date, default: Date.now()}
 });
 
-exports.PostModel = mongoose.model('post', postSchema, 'post');
+exports.postModel = mongoose.model('post', postSchema, 'post');

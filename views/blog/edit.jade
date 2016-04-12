@@ -1,0 +1,21 @@
+h1 Login
+| !{message}
+| Try accessing 
+a(ng-href='/#/auth/restricted') /restricted
+|, or register 
+a(ng-href='/#/auth/register') /register
+|,then authenticate with your "username" and "password".
+form(method='post', name='loginForm', ng-controller="loginCtrl", ng-submit='login()', novalidate)
+    p
+        label Username:
+        input(type='text', name='username', ng-model='user.username', required)
+        span(style='color:red', ng-show='loginForm.username.$dirty && loginForm.username.$invalid')
+            <span ng-show="loginForm.username.$error.required">用户名是必须的.</span>
+    p
+        label Password:
+        input(type='password', name='password', ng-model='user.password', ng-minlength='6', required)
+        span(style='color:red', ng-show='loginForm.password.$dirty && loginForm.password.$invalid')
+            span(ng-show='loginForm.password.$error.required') 密码是必须的.
+            span(ng-show='loginForm.password.$error.minlength') 不能少于6位字符.
+    p
+        input(type='submit', value='Login', ng-disabled='loginForm.username.$dirty && loginForm.username.$invalid || loginForm.password.$dirty && loginForm.password.$invalid')

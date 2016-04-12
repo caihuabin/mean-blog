@@ -1,0 +1,36 @@
+.container
+    section.blog-content
+        header.blog-content-header
+            h1.blog-content-title Register
+            | !{message}
+            | Try accessing 
+            a(ng-href='/#/auth/login') /Login
+        section.blog-content-body
+            form.pure-form.pure-form-aligned(method='post', name='registerForm', ng-submit='register()', novalidate)
+                fieldset
+                    .pure-control-group
+                        label(for='username') Username
+                        input(type='text', name='username', ng-model='user.username', ensure-unique='user.username', required)
+                        span(style='color:red', ng-show='registerForm.username.$dirty && registerForm.username.$invalid')
+                            span(ng-show='registerForm.username.$error.required') 用户名是必须的.
+                            span(ng-show='registerForm.username.$error.unique') 用户名已存在.
+                    .pure-control-group
+                        label(for='email') Email
+                        input(type='email', name='email', ng-model='user.email', required)
+                        span(style='color:red', ng-show='registerForm.email.$dirty && registerForm.email.$invalid')
+                            span(ng-show='registerForm.email.$error.required') 邮箱是必须的.
+                            span(ng-show='registerForm.email.$error.email') 不是有效邮箱.
+                    .pure-control-group
+                        label(for='password') Password
+                        input(type='password', name='password', ng-model='user.password', ng-minlength='6', required)
+                        span(style='color:red', ng-show='registerForm.password.$dirty && registerForm.password.$invalid')
+                            span(ng-show='registerForm.password.$error.required') 密码是必须的.
+                            span(ng-show='registerForm.password.$error.minlength') 不能少于6位字符.
+                    .pure-control-group
+                        label(for='password_confirmation') Comfirm Password
+                        input(type='password', name='password_confirmation', ng-model='user.password_confirmation',  pw-check="password", required)
+                        span(style='color:red', ng-show='registerForm.password_confirmation.$dirty && registerForm.password_confirmation.$invalid')
+                            span(ng-show='registerForm.password_confirmation.$error.required') 验证密码是必须的.
+                            span(ng-show='registerForm.password_confirmation.$error.pwconfirm') 验证密码不匹配.
+                    .pure-controls
+                        input.pure-button.pure-button-primary(type='submit', value='Register', ng-disabled='registerForm.username.$dirty && registerForm.username.$invalid || registerForm.password.$dirty && registerForm.password.$invalid || registerForm.password_confirmation.$dirty && registerForm.password_confirmation.$invalid || registerForm.email.$dirty && registerForm.email.$invalid')

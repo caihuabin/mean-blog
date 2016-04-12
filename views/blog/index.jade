@@ -1,0 +1,19 @@
+div.container
+    div.waterfall
+        figure.pin.blog-item
+            a.addBlog(ng-href='/#/blog/create') +
+        figure.pin.blog-item.animate-pop-up(ng-repeat='post in posts')
+            figcaption
+                a(ng-href='/#/blog/show/{{ post._id }}').pure-g
+                    div.pure-u
+                        img.blog-avatar(alt='no image, can talk', height='64', width='64', ng-src='{{ post.user.avatar || "images/avatar.png"}}')
+                    div.pure-u-3-4
+                        h5.blog-author {{ post.user.username }}cai huabin
+                        h4.blog-subject {{ post.title }}You have 5 bugs assigned to you
+                        p.blog-desc {{ post.summary }}Duis aute irure dolor in reprehenderit in voluptate velit essecillum dolore eu fugiat nulla.
+                    div.pure-u-1
+                        img.pinimg(src='http://dummyimage.com/640x21:10')
+                    div.pure-u-1-2.text-left
+                        span.icon-eye {{ post.viewCount }}
+                    div.pure-u-1-2.text-right
+                        span.icon-thumbs-up-alt {{ post.voteCount }}
