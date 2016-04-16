@@ -131,7 +131,7 @@ app.controller('LoginCtrl', ['$scope', '$rootScope', '$location', '$window', 'Au
         /*$window.location.href = data.data.returnTo;*/
     }
 }]);
-app.controller('RegisterCtrl', ['$scope', '$location', '$http', '$rootScope', function($scope, $location, $http, $rootScope) {
+app.controller('RegisterCtrl', ['$scope', '$location', '$http', '$rootScope', 'AUTH_EVENTS', function($scope, $location, $http, $rootScope, AUTH_EVENTS) {
 
     $scope.user = {username:'', password:'', password_confirmation:'', email:''};
     $scope.register = function(){

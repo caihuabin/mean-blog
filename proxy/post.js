@@ -167,6 +167,7 @@ exports.getById = function (id, callback) {
         if (err) {
             return callback(err);
         }
+        postModel.update({"_id": post._id}, {"$inc": {"viewCount": 1}}).exec();
         return callback(null, post);
     });
 };

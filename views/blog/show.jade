@@ -9,9 +9,9 @@
                     | at 
                     span {{ post.createdTime }}
             div.blog-content-controls.pure-u-1-2
-                button.secondary-button.pure-button Reply
-                button.secondary-button.pure-button Forward
-                button.secondary-button.pure-button Vote
+                button.secondary-button.pure-button Reply {{ post.replyCount }}
+                button.secondary-button.pure-button View {{ post.viewCount }}
+                button.secondary-button.pure-button Vote {{ post.voteCount }}
         section.blog-content-body
             div.blog
                 p.blog-summary {{ post.summary }}
