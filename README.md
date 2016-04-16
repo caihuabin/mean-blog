@@ -4,7 +4,7 @@ Base on my another project named MEAN, which is a full-stack Javascript starting
 
 ## Online DEMO
 
-	[114.215.164.12:3000](114.215.164.12:3000)
+	[Click here](http://114.215.164.12:3000)
 
 ## Requirements and Environment
 * Node.js
