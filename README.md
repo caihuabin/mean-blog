@@ -2,6 +2,10 @@
 MEAN-BLOG is a blog project written in MEAN - MongoDB, ExpressJS, AngularJS, NodeJS.
 Base on my another project named MEAN, which is a full-stack Javascript starting skeleton using [MEAN](https://github.com/icyse/mean)
 
+## Online DEMO
+
+	114.215.164.12:3000
+
 ## Requirements and Environment
 * Node.js
 * Express 4
