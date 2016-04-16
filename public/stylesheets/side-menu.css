@@ -207,7 +207,7 @@ Hides the menu at `48em`, but modify this based on your app's needs.
     */
     #layout.active {
         position: relative;
-        left: 150px;
+        /* left: 150px; */
     }
 }
 

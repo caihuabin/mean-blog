@@ -1,5 +1,5 @@
 var fs = require('fs');
-
+var formidable = require('formidable');
 /**
  * 搜索JSON数组
  * @param jsonArray JSON数组
@@ -94,9 +94,49 @@ exports.generateKey = function (prefix, obj) {
 };
 exports.deObject = function (obj, callback) {
     for(var key in obj){
-        if(obj[key] === undefined || obj[key] === null){
+        if(obj[key] === undefined || obj[key] === null || obj[key] === ''){
             delete obj[key];
         }
     }
     return obj;
 };
+
+exports.upload = (function(){
+    var uploadDir, uploadUrl;
+    var configure = function(opts){
+        opts.uploadDir && (uploadDir = opts.uploadDir);
+        opts.uploadUrl && (uploadUrl = opts.uploadUrl);
+    };
+    var fileHandler = function(){
+        var result = [];
+        var form = new formidable.IncomingForm();   
+        form.uploadDir = uploadDir;
+        form.maxFieldsSize = 2 * 1024 * 1024;
+        form.maxFields = 1000;
+        form.keepExtensions = true;
+        /*form.encoding = 'utf-8';
+        form.hash = false;
+        form.on('end', function() {
+        });
+        */
+        return function(req, res, next){
+            form.parse(req, function(err, fields, files) {
+                if (err) {
+                    next(err);
+                }
+                var len = uploadDir.length;
+                for(var key in files){
+                    result.push(uploadUrl + files[key].path.substring(len));
+                }
+                res.json({
+                    status: 'success',
+                    data: result
+                });
+            });
+        }
+    };
+    return {
+        configure: configure,
+        fileHandler: fileHandler
+    };
+})();

@@ -20,18 +20,18 @@ html(lang='zh-CN')
         script
             | var clientUser = !{ JSON.stringify(clientUser) || 'null' };window.clientUser = clientUser;
         title= 'MEAN-BLOG'
-    body(ng-app='mean', ng-controller='ApplicationController')
+    body(ng-app='mean', ng-controller='ApplicationController', when-scrolled='loadMore()')
         
         block content
-        
+        div(auth-dialog)
         script(type='text/javascript', src='/javascripts/vendor/nprogress.js', charset='utf-8')
-        script(type='text/javascript', src='/javascripts/vendor/ui.js', charset='utf-8')
+        script(type='text/javascript', src='/javascripts/vendor/markdown.min.js', charset='utf-8')
         script(type='text/javascript', src='/javascripts/vendor/angular-1.5.0/angular.min.js', charset='utf-8')
         script(type='text/javascript', src='/javascripts/vendor/angular-1.5.0/angular-resource.min.js', charset='utf-8')
         script(type='text/javascript', src='/javascripts/vendor/angular-1.5.0/angular-route.min.js', charset='utf-8')
         script(type='text/javascript', src='/javascripts/vendor/angular-1.5.0/angular-animate.min.js', charset='utf-8')
         
-        script(type='text/javascript', src='/javascripts/directives/directives.js', charset='utf-8')
-        script(type='text/javascript', src='/javascripts/services/services.js', charset='utf-8')
         script(type='text/javascript', src='/javascripts/configs/configs.js', charset='utf-8')
+        script(type='text/javascript', src='/javascripts/services/services.js', charset='utf-8')
+        script(type='text/javascript', src='/javascripts/directives/directives.js', charset='utf-8')
         script(type='text/javascript', src='/javascripts/controllers/controllers.js', charset='utf-8')

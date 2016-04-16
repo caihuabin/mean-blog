@@ -11,38 +11,38 @@ function getPostsQuery(params) {
     var query = {};
     query.isActive = true;
     query.isDraft = false;
-    if (params.cateId) {
-        query.category._id = params.cateId;
-    }
+
+    params.cateId && (query.category._id = params.cateId);
+    params.userId && (query.user._id = params.userId);
     if (params.searchText) {
         switch (params.filterType) {
             case '1':
-                query.Title = {"$regex": params.searchText, "$options": "gi"};
+                query.title = {"$regex": params.searchText, "$options": "gi"};
                 break;
             case '2':
-                query.Labels = {"$regex": params.searchText, "$options": "gi"};
+                query.labels = {"$regex": params.searchText, "$options": "gi"};
                 break;
             case '3':
-                query.CreateTime = {"$regex": params.searchText, "$options": "gi"};
+                query.createdTime = {"$regex": params.searchText, "$options": "gi"};
                 break;
             default:
                 query.$or = [{
-                    "Title": {
+                    "title": {
                         "$regex": params.searchText,
                         "$options": "gi"
                     }
                 }, {
-                    'Labels': {
+                    'labels': {
                         "$regex": params.searchText,
                         "$options": "gi"
                     }
                 }, {
-                    'Summary': {
+                    'summary': {
                         "$regex": params.searchText,
                         "$options": "gi"
                     }
                 }, {
-                    'Content': {
+                    'content': {
                         "$regex": params.searchText,
                         "$options": "gi"
                     }
@@ -72,7 +72,12 @@ exports.getPosts = function (params, callback) {
         var options = {};
         options.skip = parseInt(params.skip);
         options.limit = parseInt(params.limit);
-        options.sort = params.sortBy === 'title' ? 'title -createdTime' : '-createdTime';
+        if(params.sortOrder == 'asc'){
+            options.sort = params.sortName === 'title' ? 'title -createdTime' : '-createdTime';
+        }
+        else{
+            options.sort = params.sortName === 'title' ? '-title -createdTime' : '-createdTime';
+        }
         var query = getPostsQuery(params);
         postModel.find(query, {}, options, function (err, posts) {
             if (err) {
@@ -172,19 +177,7 @@ exports.getById = function (id, callback) {
  * @param callback 回调函数
  */
 exports.save = function (params, callback) {
-    var entity = new postModel({
-            title: params.title,
-            alias: params.alias,
-            summary: params.summary,
-            source: params.source,
-            content: params.content,
-            imgList: params.imgList,
-            category: params.category,
-            user: params.user,
-            labels: params.labels,
-            url: params.url,
-            isDraft: params.isDraft
-        });
+    var entity = new postModel(params);
     //`numAffected` will be 1 when the document was successfully persisted to MongoDB, otherwise 0. Unless you tweak mongoose's internals, you don't need to worry about checking this parameter for errors - checking `err` is sufficient to make sure your document was properly saved.
     entity.save(function (err, post, numAffected) {
         if (err) {
@@ -194,29 +187,14 @@ exports.save = function (params, callback) {
     });
 };
 exports.update = function (params, callback) {
-    var _id = params._id,
-        entity = new postModel({
-            title: params.title,
-            alias: params.alias,
-            summary: params.summary,
-            source: params.source,
-            content: params.content,
-            imgList: params.imgList,
-            categoryId: params.category,
-            user: params.user,
-            labels: params.labels,
-            url: params.url,
-            isDraft: params.isDraft === true,
-            softDelete: params.softDelete === true,
-            isActive: true,
-            updatedTime: Date.now()
-        });
-        
+    var _id = params._id, entity = params;
+    delete entity._id;
+
     postModel.findById(_id, function (err, post) {
         if (err) {
             return callback(err);
         }
-        postModel.update({"_id": _id}, entity, function (err) {
+        postModel.update({'_id': _id}, entity, function (err) {
             if (err) {
                 return callback(err);
             }

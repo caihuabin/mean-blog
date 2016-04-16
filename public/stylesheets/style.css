@@ -67,11 +67,13 @@ a {
 
 #content{
 	position: relative;
+    overflow: auto;
 }
 .container {
 	width: 100%;
 	max-width: 1100px;
 	margin: 0 auto;
+    margin-top: 2em;
 }
 
 .waterfall {
@@ -158,8 +160,6 @@ a {
 	-moz-box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
 	-webkit-box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
 	box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
-
-	margin: 1em 0;
 	
 	width: 100%;
   	-moz-page-break-inside: avoid;
@@ -331,6 +331,20 @@ a {
 a.blog-author{
     color: #1b98f8;
 }
+.blog{
+  overflow: auto;
+}
+.blog .blog-summary{
+      line-height: 4em;
+    font-weight: 600;
+    color: gray;
+    background-image:-webkit-linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
+    background-image:-moz-linear-gradient(top,rgba(0,0,0,.05) 0,rgba(0,0,0,.1));
+    background-image:-o-linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
+    background-image:linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
+    border-radius: 0.3em;
+    padding: 1em;
+}
 /*
  * -- HELPER STYLES --
  * Over-riding some of the .pure-button styles to make my buttons look unique
@@ -457,19 +471,103 @@ img.hover(:hover) {
 .slide-down.ng-leave.ng-leave-active {
     transform:translateY(100%);
 }
-
+/* ------------------------------------------- */
+/* Slide Rigth 
+/* ------------------------------------------- */
+/* line 163, ../sass/ng-animation.scss */
+.slide-right {
+  -webkit-transition: all 0 cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  -moz-transition: all 0 cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  -ms-transition: all 0 cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  -o-transition: all 0 cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0 cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* easeOutQuad */
+  -webkit-transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  -moz-transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  -ms-transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  -o-transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* easeOutQuad */
+}
+/* line 165, ../sass/ng-animation.scss */
+.slide-right.ng-enter {
+  transform: translateX(60px);
+  -ms-transform: translateX(60px);
+  -webkit-transform: translateX(60px);
+  transition-duration: 250ms;
+  -webkit-transition-duration: 250ms;
+  opacity: 0;
+}
+/* line 171, ../sass/ng-animation.scss */
+.slide-right.ng-enter-active {
+  transform: translateX(0);
+  -ms-transform: translateX(0);
+  -webkit-transform: translateX(0);
+  opacity: 1;
+}
+/* line 176, ../sass/ng-animation.scss */
+.slide-right.ng-leave {
+  transform: translateX(0);
+  -ms-transform: translateX(0);
+  -webkit-transform: translateX(0);
+  transition-duration: 250ms;
+  -webkit-transition-duration: 250ms;
+  opacity: 1;
+}
+/* line 182, ../sass/ng-animation.scss */
+.slide-right.ng-leave-active {
+  transform: translateX(60px);
+  -ms-transform: translateX(60px);
+  -webkit-transform: translateX(60px);
+  opacity: 0;
+}
+/* line 188, ../sass/ng-animation.scss */
+.slide-right.ng-hide-add {
+  transform: translateX(0);
+  -ms-transform: translateX(0);
+  -webkit-transform: translateX(0);
+  transition-duration: 250ms;
+  -webkit-transition-duration: 250ms;
+  opacity: 1;
+}
+/* line 193, ../sass/ng-animation.scss */
+.slide-right.ng-hide-add.ng-hide-add-active {
+  transform: translateX(60px);
+  -ms-transform: translateX(60px);
+  -webkit-transform: translateX(60px);
+  opacity: 0;
+}
+/* line 199, ../sass/ng-animation.scss */
+.slide-right.ng-hide-remove {
+  transform: translateX(60px);
+  -ms-transform: translateX(60px);
+  -webkit-transform: translateX(60px);
+  transition-duration: 250ms;
+  -webkit-transition-duration: 250ms;
+  display: block !important;
+  opacity: 0;
+}
+/* line 205, ../sass/ng-animation.scss */
+.slide-right.ng-hide-remove.ng-hide-remove-active {
+  transform: translateX(0);
+  -ms-transform: translateX(0);
+  -webkit-transform: translateX(0);
+  opacity: 1;
+}
 .fade {
+/* 
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 100%;
+     */
     opacity: 1;
 }
 .fade.ng-enter,
 .fade.ng-leave {
-    -webkit-transition: all 1s ease;
-    transition: all 1s ease;
+    -webkit-transition: all 1.2s ease;
+    transition: all 1.2s ease;
 }
 .fade.ng-enter {
     opacity: 0;
@@ -484,27 +582,110 @@ img.hover(:hover) {
     opacity: 0;
 }
 
+.fade.ng-hide-add,
+.fade.ng-hide-remove {
+    -webkit-transition: all 1.2s ease;
+    transition: all 1.2s ease;
+}
+.fade.ng-hide-add {
+    opacity: 1;
+}
+.fade.ng-hide-add.ng-hide-add-active {
+    opacity: 0;
+}
+.fade.ng-hide-remove {
+    opacity: 0;
+}
+.fade.ng-hide-remove.ng-hide-remove-active {
+    opacity: 1;
+}
+/* line 789, ../sass/ng-animation.scss */
+.flip-in.ng-hide-add {
+    transform: perspective(300px) rotateX(0deg);
+    -ms-transform: perspective(300px) rotateX(0deg);
+    -webkit-transform: perspective(300px) rotateX(0deg);
+    transition-duration: 1.2s;
+    -webkit-transition-duration: 1.2s;
+    opacity: 1;
+}
+/* line 794, ../sass/ng-animation.scss */
+.flip-in.ng-hide-add.ng-hide-add-active {
+    transform: perspective(300px) rotateX(135deg);
+    -ms-transform: perspective(300px) rotateX(135deg);
+    -webkit-transform: perspective(300px) rotateX(135deg);
+    opacity: 0;
+}
+/* line 800, ../sass/ng-animation.scss */
+.flip-in.ng-hide-remove {
+    transform: perspective(300px) rotateX(90deg);
+    -ms-transform: perspective(300px) rotateX(90deg);
+    -webkit-transform: perspective(300px) rotateX(90deg);
+    transition-duration: 1.2s;
+    -webkit-transition-duration: 1.2s;
+    display: block !important;
+    opacity: 0;
+}
+/* line 806, ../sass/ng-animation.scss */
+.flip-in.ng-hide-remove.ng-hide-remove-active {
+    transform: perspective(300px) rotateX(0deg);
+    -ms-transform: perspective(300px) rotateX(0deg);
+    -webkit-transform: perspective(300px) rotateX(0deg);
+    opacity: 1;
+}
+/* line 843, ../sass/ng-animation.scss */
+.rotate-in.ng-hide-add {
+    transform: perspective(300px) rotateY(0deg);
+    -ms-transform: perspective(300px) rotateY(0deg);
+    -webkit-transform: perspective(300px) rotateY(0deg);
+    transition-duration: 1.2s;
+    -webkit-transition-duration: 1.2s;
+    opacity: 1;
+}
+/* line 848, ../sass/ng-animation.scss */
+.rotate-in.ng-hide-add.ng-hide-add-active {
+    transform: perspective(300px) rotateY(-40deg);
+    -ms-transform: perspective(300px) rotateY(-40deg);
+    -webkit-transform: perspective(300px) rotateY(-40deg);
+    opacity: 0;
+}
+/* line 854, ../sass/ng-animation.scss */
+.rotate-in.ng-hide-remove {
+    transform: perspective(300px) rotateY(40deg);
+    -ms-transform: perspective(300px) rotateY(40deg);
+    -webkit-transform: perspective(300px) rotateY(40deg);
+    transition-duration: 1.2s;
+    -webkit-transition-duration: 1.2s;
+    display: block !important;
+    opacity: 0;
+}
+/* line 860, ../sass/ng-animation.scss */
+.rotate-in.ng-hide-remove.ng-hide-remove-active {
+    transform: perspective(300px) rotateY(0deg);
+    -ms-transform: perspective(300px) rotateY(0deg);
+    -webkit-transform: perspective(300px) rotateY(0deg);
+    opacity: 1;
+}
 /* Navigation */
 nav.slideshow a {
     position: fixed;
-    z-index: 1000;
+    z-index: 500;
     color: #59656c;
     text-align: center;
     cursor: pointer;
-    font-size: 2em;
-    padding: 0.5em 0.5em;
+    font-size: 1.8em;
+    padding: 0.3em 0.3em;
 }
 
 nav.slideshow a.nav-prev,
 nav.slideshow a.nav-next {
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
-nav.slideshow a.nav-prev {
     
 }
+nav.slideshow a.nav-prev {
+    top:20px;
+    right: 0;
+}
 nav.slideshow a.nav-next {
+    bottom: 20px;
     right: 0;
 }
 
@@ -514,7 +695,118 @@ nav.slideshow a.nav-close {
 }
 nav.slideshow a.nav-edit {
     top: 0;
-    right: 3em;
+    right: 50px;
+}
+nav.slideshow a.nav-login {
+    top: 0;
+    left: 0;
+}
+
+.overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: rgba(0,0,0,.8);
+    z-index: 1001;
+    color:white;
+}
+.overlay article {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -165px 0 0 -250px;
+    max-width: 500px;
+    width: 100%;
+    height: 330px;
+}
+.overlay nav.slideshow a {
+    position: absolute;
+    color:white;
+}
+.overlay input{
+    color: #4d4d4d;
+}
+.overlay input[type='submit']{
+    color: white;
+}
+
+.overlay.blog-preview-dialog{
+    background: #eaeaea url('../images/bg.png');
+    z-index: 500;
+    margin-left: 150px;
+    overflow: auto;
+}
+.overlay.blog-preview-dialog nav.slideshow a {
+    color:black;
+}
+.overlay section.container{
+    color:#4d4d4d;
+}
+.fileInputContainer{
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    height:25px;
+    width:25px;
+    line-height: 25px;
+    position:relative;
+    background-color: transparent;
+    font-size: 18px;
+    color:black;
+}
+.fileInput{
+    height:25px;
+    width: 25px;
+    overflow: hidden;
+    position:absolute;
+    right:0;
+    top:0;
+    opacity: 0;
+    filter:alpha(opacity=0);
+    cursor:pointer;
+}
+.menu-icon{
+    display: inline-block;
+    font-weight: bold;
+    font-size: 18px;
+    color:black;
+    cursor:pointer;
+    margin-left: 18px;
+    margin-right: 18px;
+}
+
+article.about-content, article.contact-content{
+  line-height: 2em;
+    font-size: 16px;
+}
+
+.img-box{
+  position: relative;
+}
+.img-box nav .nav-item{
+  position: absolute;
+  color:black;
+  display: inline-block;
+}
+.img-box nav .nav-item.nav-cancel{
+    right: 0;
+    top: 0;
+    font-size: 18px;
+}
+.img-box nav .nav-item.nav-ok{
+    left: 50%;
+    top: 50%;
+    font-size: 40px;
+    margin-left: -28px;
+    margin-top:-20px;
+    color:white;
+}
+@media screen and (max-width: 1250px) {
+    .container.blogCreatePage{
+        margin-top: 0;
+    }
 }
 @media screen and (max-width: 60em) {
 	.waterfall { 
@@ -557,4 +849,18 @@ nav.slideshow a.nav-edit {
 		-webkit-column-count: 1;
 		column-count: 1;
   	}
+    .overlay article {
+        left: 0;
+        top: 0;
+        margin: 3em auto;
+        height: auto;
+    }
+    .pure-form .pure-input-2-3{
+        width:100%;
+    }
+}
+@media (max-width: 48em) {
+  .overlay.blog-preview-dialog{
+    margin-left: auto;
+  }
 }

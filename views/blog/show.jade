@@ -14,13 +14,9 @@
                 button.secondary-button.pure-button Vote
         section.blog-content-body
             div.blog
-                p {{ post.content }}
-                p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                p.blog-summary {{ post.summary }}
+                div(mark-down, ng-bind-html='previewContent')
     nav.slideshow
-        a.nav-prev(ng-click='prev()')
-            span.icon-left-open
-        a.nav-next(ng-click='next()')
-            span.icon-right-open
         a.nav-close(ng-href='/#/blog')
             span.icon-cancel
         a.nav-edit(ng-href='/#/blog/edit/{{post._id}}')

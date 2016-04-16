@@ -1,45 +1,45 @@
 extends ./layout
 block content
 	div#layout
-		a#menuLink.menu-link(href='#menu')
+		a#menuLink.menu-link(href='javascript:;', menu-link)
 			span
 		nav#menu
 			div.pure-menu
-				a.pure-menu-heading(ng-href='#') MEAN-BLOG
+				a.pure-menu-heading(ng-href='/#/blog') MEAN-BLOG
 				ul.pure-menu-list
 					li.pure-menu-item
-						a.pure-menu-link(ng-href='/#/blog')
+						a.pure-menu-link(ng-href='/#/blog', class='{{ (currentRoutePath.indexOf("/blog") == 0) ? "pure-menu-selected" : "" }}')
 							span.label-light-red
 							| BLOG 
 							span.label-count ( {{ BlogCount ? BlogCount : '^.^' }} )
 					li.pure-menu-item
-						a.pure-menu-link(href='#')
+						a.pure-menu-link(ng-href='/#/about', class='{{ (currentRoutePath.indexOf("/about") == 0) ? "pure-menu-selected" : "" }}')
 							span.label-yellow
 							| About
-					li.pure-menu-item.menu-item-divided.pure-menu-selected
-						a.pure-menu-link(href='#')
-							span.label-blue
-							| Services
 					li.pure-menu-item
-						a.pure-menu-link(href='#')
+						a.pure-menu-link(ng-href='/#/contact', class='{{ (currentRoutePath.indexOf("/contact") == 0) ? "pure-menu-selected" : "" }}')
 							span.label-green
 							| Contact
-					li.pure-menu-heading User
+					li.pure-menu-item
+						a.pure-menu-link(ng-href='/#/blog')
+							span.label-blue
+							| Nothing
+					li.pure-menu-heading.menu-item-divided User
 					li.pure-menu-item(ng-if='!!currentUser')
 						a.pure-menu-link
 							span.label-dark-blue
 							| Welcome, {{ currentUser.username }}
 					li.pure-menu-item(ng-if='!!currentUser')
-						a.pure-menu-link(href='/#/auth/logout')
-							span.label-dark-green
+						a.pure-menu-link(href='/auth/logout')
+							span.icon-logout 
 							| Sign Out
-			ul.nav-list
+			ul.nav-list(ng-if='!currentUser')
 				li.nav-item
-					a.pure-button(href='/#/auth/login') Sign In
+					a.pure-button(href='javascript:;', ng-click='authDialog("login")') Sign I n
 				li.nav-item
-					a.pure-button(href='/#/auth/register') Sign Up
+					a.pure-button(href='javascript:;', ng-click='authDialog("register")') Sign Up
 		div#main
-			section(id='content', ng-view, class='slide-down')
+			section(id='content', ng-view, class='fade')
 			footer(id='info')
 				p Originated by 
 					a(href='https://github.com/icyse') Cai

@@ -1,22 +1,15 @@
 'use strict';
 var app = angular.module('mean', ['ngRoute', 'ngAnimate', 'mean.directives', 'mean.services', 'mean.configs']);
-app.config(['$routeProvider', '$locationProvider', 'USER_ROLES', function($routeProvider, $locationProvider, USER_ROLES) {
+
+app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'USER_ROLES', function($routeProvider, $locationProvider, $httpProvider, USER_ROLES) {
     $routeProvider.
-        when('/auth/login', {
-            controller: 'loginCtrl',
-            resolve: {
-                AuthService: ['AuthService', function(AuthService){
-                    return AuthService;
-                }],
-                AUTH_EVENTS: ['AUTH_EVENTS', function(AUTH_EVENTS){
-                    return AUTH_EVENTS;
-                }]
-            },
-            templateUrl:'/auth/login'
-        }).when('/auth/register', {
-            controller: 'registerCtrl',
-            templateUrl:'/auth/register'
-        }).when('/auth/restricted',{
+        when('/about',{
+            templateUrl:'/about'
+        }).
+        when('/contact',{
+            templateUrl:'/contact'
+        }).
+        when('/auth/restricted',{
             templateUrl:'/auth/restricted',
             data: {
                 authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor, USER_ROLES.guest]
@@ -55,6 +48,12 @@ app.config(['$routeProvider', '$locationProvider', 'USER_ROLES', function($route
                 authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
             }
         }).otherwise({redirectTo:'/blog'});
+        $httpProvider.interceptors.push([
+            '$injector',
+            function ($injector) {
+                return $injector.get('AuthInterceptor');
+            }
+        ]);
         /*$locationProvider.html5Mode(true);*/
 }]);
 
@@ -65,15 +64,15 @@ app.run(['$rootScope', '$location', 'AuthService', 'AUTH_EVENTS', function($root
         if(!!routeData){
             var authorizedRoles = routeData.authorizedRoles;
             if (!AuthService.isAuthorized(authorizedRoles)) {
-                event.preventDefault();
+                evt.preventDefault();
+                NProgress.done();
                 if (AuthService.isAuthenticated()) {
                     // user is not allowed
                     $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
                     console.log('user is not allowed');
                 } else {
                     // user is not logged in
-                    $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-                    $location.path('/auth/login');
+                    $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated, 'login');
                 }
             }
         }
@@ -85,13 +84,26 @@ app.run(['$rootScope', '$location', 'AuthService', 'AUTH_EVENTS', function($root
         NProgress.done();
     });
 }]);
-app.controller('ApplicationController', ['$scope', 'USER_ROLES', 'AuthService', 'Session', '$window', function ($scope, USER_ROLES, AuthService, Session, $window) {
+app.controller('ApplicationController', ['$scope', 'USER_ROLES', 'AuthService', 'Session', '$window', 'AUTH_EVENTS', 'CUSTOM_EVENTS', function ($scope, USER_ROLES, AuthService, Session, $window, AUTH_EVENTS, CUSTOM_EVENTS) {
     $scope.currentUser = null;
     $scope.BlogCount = null;
     $scope.userRoles = USER_ROLES;
     $scope.isAuthorized = AuthService.isAuthorized;
+    $scope.currentRoutePath = '/blog';
     var currentUser = $window.clientUser;
 
+    $scope.$on('$routeChangeSuccess', function(evt, next, previous) {
+        if(!!next.$$route){
+            $scope.currentRoutePath = next.$$route.originalPath;
+        }
+        
+    });
+    $scope.authDialog = function(data){
+        $scope.$broadcast(AUTH_EVENTS.notAuthenticated, data);
+    };
+    $scope.blogDialog = function(){
+        $scope.$broadcast(CUSTOM_EVENTS.blogPreviewOpen);
+    };
     $scope.setCurrentUser = function (user) {
         $scope.currentUser = user;
     };
@@ -103,10 +115,11 @@ app.controller('ApplicationController', ['$scope', 'USER_ROLES', 'AuthService', 
         $scope.setCurrentUser(currentUser);
     }
 }]);
-app.controller('loginCtrl', ['$scope', '$rootScope', '$location', '$window', 'AuthService', 'AUTH_EVENTS', function($scope, $rootScope, $location, $window, AuthService, AUTH_EVENTS) { 
+app.controller('LoginCtrl', ['$scope', '$rootScope', '$location', '$window', 'AuthService', 'AUTH_EVENTS', function($scope, $rootScope, $location, $window, AuthService, AUTH_EVENTS) { 
     $scope.credentials = {username:'', password:''};
     $scope.login = function(credentials){
         AuthService.login(credentials).then(function (data) {
+            //向下广播
             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, data);
             $scope.setCurrentUser(data.user);
             /*$location.path(data.returnTo).replace();*/
@@ -118,9 +131,9 @@ app.controller('loginCtrl', ['$scope', '$rootScope', '$location', '$window', 'Au
         /*$window.location.href = data.data.returnTo;*/
     }
 }]);
-app.controller('registerCtrl', ['$scope', '$location', '$http', function($scope, $location, $http) {
-	var user = {username:'', password:'', password_confirmation:'', email:''};
-    $scope.user = user;
+app.controller('RegisterCtrl', ['$scope', '$location', '$http', '$rootScope', function($scope, $location, $http, $rootScope) {
+
+    $scope.user = {username:'', password:'', password_confirmation:'', email:''};
     $scope.register = function(){
         $http.post('/auth/register', {
                 username: $scope.user.username
@@ -128,27 +141,54 @@ app.controller('registerCtrl', ['$scope', '$location', '$http', function($scope,
                 , password_confirmation: $scope.user.password_confirmation
                 , email: $scope.user.email
             }).success(function (data) {
-                console.log(data);
-                $location.path('/auth/login');
-            }).error(function (data) {
+                $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, data);
+            }).error(function (error) {
                 console.log(data);
             });
     }
 }]);
-app.controller('BlogListCtrl', ['$scope', 'posts', function($scope, posts) {
+app.controller('BlogListCtrl', ['$scope', 'posts', 'CUSTOM_EVENTS', function($scope, posts, CUSTOM_EVENTS) {
     /*$scope.posts = posts({});*/
-    posts({skip: 0, limit: 20}).then(function(result){
-        $scope.posts = result[0];
-        $scope.setBlogCount(result[1]);
-    },function(error){
+    $scope.posts = [];
+    function fetchPromise(params){
+        return posts(params).then(function(result){
+            $scope.posts = $scope.posts.concat(result);
+            $scope.setBlogCount($scope.posts.length);
+        },function(error){
 
+        });
+    };
+    fetchPromise({skip: 0, limit: 12});
+
+    $scope.$on(CUSTOM_EVENTS.loadMore, function(data){
+        $scope.$emit(CUSTOM_EVENTS.loading);
+        NProgress.start();
+        setTimeout(function(){
+            fetchPromise({skip: $scope.posts.length, limit: 12}).then(function(){
+                $scope.$emit(CUSTOM_EVENTS.loaded);
+                NProgress.done();
+            });
+        }, 1000);
+        
     });
 
 }]);
-app.controller('BlogCreateCtrl', ['$scope', '$location', 'Post', function($scope, $location, Post) {
+app.controller('BlogCreateCtrl', ['$scope', '$location', 'Post', 'CUSTOM_EVENTS', function($scope, $location, Post, CUSTOM_EVENTS) {
     $scope.post = new Post();
-
+    $scope.imageDataUrlList = [];
+    $scope.$on(CUSTOM_EVENTS.readFilesSuccess, function(args, data){
+        $scope.imageDataUrlList = $scope.imageDataUrlList.concat(data);
+    });
+    $scope.$on(CUSTOM_EVENTS.uploadFilesSuccess, function(args, data){
+        var appendMarkdownStr = '\n';
+        angular.forEach(data, function(val, key){
+            appendMarkdownStr += ('![no image, can talk](' + val + ' "by Cai")');
+        });
+        $scope.post.content = $scope.post.content ? $scope.post.content + appendMarkdownStr : appendMarkdownStr;
+        $scope.post.imgList = angular.isArray($scope.post.imgList) ? $scope.post.imgList.concat(data) : data;
+    });
     $scope.save = function() {
+        $scope.post.user = $scope.currentUser;
         $scope.post.$save(function(result) {
             var post = result.data;
             $location.path('/blog/show/' + post._id);
@@ -157,23 +197,80 @@ app.controller('BlogCreateCtrl', ['$scope', '$location', 'Post', function($scope
 }]);
 app.controller('BlogShowCtrl', ['$scope', '$location', 'post', function($scope, $location, post) {
     $scope.post = post.data;
-    $scope.prev = function() {
-        $location.path('/blog/show/' + $scope.post._id);
-    };
-    $scope.next = function() {
-        $location.path('/blog/show/' + $scope.post._id);
-    };
 }]);
 
-app.controller('BlogEditCtrl', ['$scope', '$location', 'post', function($scope, $location, post) {
-    $scope.post = post.data;
-    $scope.save = function() {
-        $scope.post.$save(function(post) {
-            $location.path('/blog/show/' + $scope.post._id);
+app.controller('BlogEditCtrl', ['$scope', '$location', 'post', 'Post', 'CUSTOM_EVENTS', function($scope, $location, post, Post, CUSTOM_EVENTS) {
+    $scope.post = new Post(post.data);
+    $scope.imageDataUrlList = [];
+    $scope.$on(CUSTOM_EVENTS.readFilesSuccess, function(args, data){
+        $scope.imageDataUrlList = $scope.imageDataUrlList.concat(data);
+    });
+    $scope.$on(CUSTOM_EVENTS.uploadFilesSuccess, function(args, data){
+        var appendMarkdownStr = '\n';
+        angular.forEach(data, function(val, key){
+            appendMarkdownStr += ('![no image, can talk](' + val + ' "by Cai")');
+        });
+        $scope.post.content = $scope.post.content ? $scope.post.content + appendMarkdownStr : appendMarkdownStr;
+        $scope.post.imgList = angular.isArray($scope.post.imgList) ? $scope.post.imgList.concat(data) : data;
+    });
+    var postId = post.data._id;
+    $scope.update = function() {
+        $scope.post.$update(function(result) {
+            var post = result.data;
+            $location.path('/blog/show/' + postId);
         });
     };
     $scope.remove = function() {
-        delete $scope.post;
-        $location.path('/blog');
+        if (confirm('Are you sure to delete it ? ') == true){
+            $scope.post.$delete(function(){
+                $location.path('/blog');
+            });
+        }
+    };
+}]);
+
+app.controller('UploaderController', ['$scope', 'fileReader', 'fileUpload', '$rootScope', 'CUSTOM_EVENTS', function($scope, fileReader, fileUpload, $rootScope, CUSTOM_EVENTS){
+    $scope.readFiles = function (opts) {
+        var imageDataUrlList = [];
+        var files = $scope.files;
+        angular.forEach(files, function(val, key, array) {
+            fileReader.readAsDataUrl(val, $scope).then(function(result) {
+                imageDataUrlList.push(result);
+                if(array.length - 1 == key){
+                    $rootScope.$broadcast(CUSTOM_EVENTS.readFilesSuccess, imageDataUrlList);
+                    opts.success && opts.success();
+                }
+            }, function(result){
+                opts.error && opts.error();
+            });
+        });
+    };
+    $scope.uploadFinished = function(e, data) {
+        console.log('We just finished uploading this baby...');
+    };
+    $scope.uploadFiles = function(opts){
+        var postData = $scope.files;
+        var imageSrcList;
+        fileUpload.uploadToUrl('/posts/upload', postData).then(function(result){
+            var data = result.data;
+            imageSrcList = data.data;
+            $rootScope.$broadcast(CUSTOM_EVENTS.uploadFilesSuccess, imageSrcList);
+            opts.success && opts.success();
+        }, function(){
+            console.log('error');
+            opts.error && opts.error();
+        });
+    };
+
+}]);
+
+app.controller('IngredientsCtrl', ['$scope', function($scope) {
+/*    $scope.addIngredient = function() {
+        var ingredients = $scope.recipe.ingredients;
+        ingredients[ingredients.length] = {};
+    };*/
+    $scope.removeImageDataUrl = function(index) {
+        $scope.imageDataUrlList.splice(index, 1);
+        $scope.post.imgList.splice(index, 1);
     };
 }]);

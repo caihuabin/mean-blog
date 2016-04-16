@@ -1,33 +1,33 @@
 var express = require('express');
 var router = express.Router();
-/*var path = require('path');*/
-/*var upload = require('jquery-file-upload-middleware');*/
+var path = require('path');
 var postProxy = require('../proxy/post');
 var eventproxy = require('eventproxy');
 var redisClient = require('../utility/redisClient');
 var tool = require('../utility/tool');
+var upload = tool.upload;
 var validator = require('../utility/validator').validator;
 
-/*upload.configure({
-    uploadDir: path.join(__dirname, '../public/images/'),
-    uploadUrl: '/images'
-});*/
+upload.configure({
+    uploadDir: path.join(__dirname, '../public/uploads/images/'),
+    uploadUrl: '/uploads/images/'
+});
 
 router.get('/', function (req, res, next) {
     var ep = new eventproxy(),
         filter,
         params = {
-            pageIndex: req.body.pageNumber,
-            pageSize: req.body.pageSize,
-            sortName: req.body.sortName,
-            sortOrder: req.body.sortOrder,
-            searchText: req.body.searchText,
-            filterType: req.body.filterType
+            skip: req.query.skip,
+            limit: req.query.limit,
+            sortName: req.query.sortName,
+            sortOrder: req.query.sortOrder,
+            searchText: req.query.searchText,
+            filterType: req.query.filterType
         };
-    if (req.body.filter) {
-        filter = JSON.parse(req.body.filter);
-        params.cateId = filter.cateName;
-        params.title = filter.title;
+    if (req.query.filter) {
+        filter = JSON.parse(req.query.filter);
+        params.cateId = filter.cateId;
+        params.userId = filter.userId;
     }
     params = tool.deObject(params);
     ep.all('posts', 'count', function (posts, count) {
@@ -36,23 +36,23 @@ router.get('/', function (req, res, next) {
         posts.forEach(function (item) {
             post = {
                 _id: item._id,
-                alias: item.alias,
                 title: item.title,
-                createdTime: item.createdTime,
-                updatedTime: item.updatedTime,
+                alias: item.alias,
                 summary: item.summary,
-                viewCount: item.viewCount,
                 imgList: item.imgList,
+                labels: item.labels,
                 url: item.url,
                 user: item.user,
                 category: item.category,
-                isDraft: item.isDraft,
-                isActive: item.isActive
+                viewCount: item.viewCount,
+                voteCount: item.voteCount,
+                replyCount: item.replyCount,
+                createdTime: item.createdTime,
+                updatedTime: item.updatedTime,
             };
             result.push(post);
         });
-
-        res.json([posts, count]);
+        res.json(result);
     });
 
     postProxy.getPosts(params, function (err, posts) {
@@ -80,25 +80,26 @@ router.post('/', function (req, res, next) {
         alias: ['required'],
         content: ['required']
     };
-    var data = {
+    var params = {
         title: req.body.title,
         alias: req.body.alias,
-        summary: req.body.summary || null,
-        source: req.body.source || null,
+        summary: req.body.summary,
+        source: req.body.source,
         content: req.body.content,
-        imgList: req.body.imgList || null,
-        labels: req.body.labels || null,
-        url: req.body.url || null,
-        user: req.body.user || null,
-        category: req.body.category || null,
-        isDraft: req.body.isDraft || false
+        imgList: req.body.imgList,
+        labels: req.body.labels,
+        url: req.body.url,
+        user: req.body.user,
+        category: req.body.category,
+        isDraft: req.body.isDraft == true
     };
-    validator(rules, data, function(err){
+    params = tool.deObject(params);
+    validator(rules, params, function(err){
         if(err){
             next(err);
         }
         else{
-            postProxy.save(data, function (err, post) {
+            postProxy.save(params, function (err, post) {
                 if (err) {
                     next(err);
                 } else {
@@ -122,12 +123,13 @@ router.put('/:id', function (req, res, next) {
         content: req.body.content,
         imgList: req.body.imgList,
         category: req.body.category,
-        user: req.session.user,
         labels: req.body.labels,
         url: req.body.url,
-        isDraft: req.body.isDraft,
-        softDelete: req.body.softDelete
+        isDraft: req.body.isDraft == true,
+        isActive: req.body.isActive == true,
+        updatedTime: Date.now()
     };
+    params = tool.deObject(params);
     postProxy.update(params, function (err) {
         if (err) {
             next(err);
@@ -154,20 +156,25 @@ router.get('/:id', function (req, res, next) {
         } else {
             var result = {
                 _id: post._id,
-                alias: post.alias,
                 title: post.title,
-                createdTime: post.createdTime,
-                updatedTime: post.updatedTime,
+                alias: post.alias,
                 summary: post.summary,
-                viewCount: post.viewCount,
                 source: post.source,
                 content: post.content,
                 imgList: post.imgList,
+                labels: post.labels,
                 url: post.url,
                 user: post.user,
                 category: post.category,
+                viewCount: post.viewCount,
+                voteCount: post.voteCount,
+                replyCount: post.replyCount,
+                voteList: post.voteList,
+                replyList: post.replyList,
                 isDraft: post.isDraft,
-                isActive: post.isActive
+                isActive: post.isActive,
+                createdTime: post.createdTime,
+                updatedTime: post.updatedTime
             };
             res.json({
                 status: 'success',
@@ -205,8 +212,8 @@ router.post('/undo/:id', function (req, res, next) {
     })
 });
 
-router.post('/uploadimg', function (req, res, next) {
-    /*upload.fileHandler()(req, res, next);*/
+router.post('/upload', function (req, res, next) {
+    upload.fileHandler()(req, res, next);
 });
 
 module.exports = router;

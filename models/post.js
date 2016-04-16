@@ -15,7 +15,7 @@ var postSchema = new mongoose.Schema({
     //图片
     imgList: {type: Array, default: []},
     //标签
-    labels: {type: String},
+    labels: {type: Array, default: []},
     //外链Url
     url: {type: String},
     //分类

@@ -1,8 +1,15 @@
-div.container
+div.container.blogCreatePage
     section.page
-        header.page-header
+        header.page-header.pure-g
+            div.pure-u-1-2
+            div.pure-u-1-2.text-right(style='line-height: 3em;')
+                div.fileInputContainer(ng-controller='UploaderController')
+                    input#imagesUpload.fileInput(type='file', name='files[]', multiple, file-model='readAndUpload')
+                    span.icon-picture
+                a(ng-click='blogDialog()')
+                    span.menu-icon.icon-eye
         section.page-content
-            form.pure-form.pure-form-aligned(method='post', name='postForm', ng-controller="BlogCreateCtrl", ng-submit='save()', novalidate)
+            form.pure-form.pure-form-aligned(method='post', name='postForm', ng-submit='save()', novalidate)
                 fieldset
                     .pure-control-group
                         label(for='title') Title
@@ -16,11 +23,34 @@ div.container
                             span(ng-show='postForm.alias.$error.required') 是必须的.
                             span(ng-show='postForm.alias.$error.unique') 已存在.
                     .pure-control-group
+                        label(for='summary') Summary
+                        input.pure-input-2-3(type='text', name='summary', placeholder='Summary', ng-model='post.summary')
+                    .pure-control-group
+                        label(for='source') Source
+                        input.pure-input-2-3(type='text', name='source', placeholder='Source', ng-model='post.source')
+                    .pure-control-group
+                        label(for='url') Url
+                        input.pure-input-2-3(type='text', name='url', placeholder='Url', ng-model='post.url')
+                    .pure-control-group
+                        label(for='category') Category
+                        input.pure-input-2-3(type='text', name='category', placeholder='Category', ng-model='post.category')
+                    .pure-control-group
+                        label(for='labels') Labels
+                        input.pure-input-2-3(type='text', name='labels', placeholder='Labels', ng-model='post.labels')
+                    .pure-control-group
                         label(for='content') Content
-                        textarea.pure-input-2-3(name='content', rows='10', placeholder='Content(markdown)', ng-model='post.content', required)
+                        textarea.pure-input-2-3(name='content', rows='23', placeholder='Content(markdown)', ng-model='post.content', required)
                         span(style='color:red', ng-show='postForm.content.$dirty && postForm.content.$invalid')
                             span(ng-show='postForm.content.$error.required') 是必须的.
-
+                    div.pure-u-1(ng-controller='IngredientsCtrl')
+                        div.pure-u-1-5.img-box(ng-repeat='imageDataUrl in imageDataUrlList track by $index')
+                            img.pure-img-responsive(ng-src='{{ imageDataUrl }}')
+                            nav
+                                span.icon-ok-circled2.nav-item.nav-ok
+                                a.icon-cancel-circled2.nav-item.nav-cancel(href='javascript:;', ng-click='removeImageDataUrl($index)')
                     .pure-controls
+                        label.pure-checkbox(for='isDraft')
+                            input(type='checkbox', ng-model='post.isDraft')
+                            |  isDraft
                         input.pure-button.button-large(type='submit', value='Done', ng-disabled='postForm.title.$dirty && postForm.title.$invalid || postForm.content.$dirty && postForm.content.$invalid || postForm.alias.$dirty && postForm.alias.$invalid')
-                    
+div(blog-dialog)

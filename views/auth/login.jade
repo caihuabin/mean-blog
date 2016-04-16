@@ -3,11 +3,6 @@
         header.blog-content-header
             h1.blog-content-title Login
             | !{message}
-            | Try accessing 
-            a(ng-href='/#/auth/restricted') /restricted
-            |, or register 
-            a(ng-href='/#/auth/register') /register
-            |,then authenticate with your "username" and "password".
         section.blog-content-body
             form.pure-form.pure-form-aligned(method='post', name='loginForm', ng-submit='login(credentials)', novalidate)
                 fieldset

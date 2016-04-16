@@ -36,7 +36,7 @@ function restrict(req, res, next) {
     if (req.session.user) {
         next();
     } else {
-        res.send('Wahoo! Access denied!, click to <a ng-href="/#/auth/login">Login</a>');
+        res.send('Wahoo! Access denied!, Please to <a href="javascript:;",  ng-click="authDialog()"> Login </a>');
     }
 }
 router.get('/restricted', restrict, function(req, res){
@@ -126,17 +126,10 @@ router.post('/login', function (req, res, next) {
 		                req.session.success = 'Authenticated as ' + user.username
 		                    + ' click to <a href="/auth/logout">logout</a>. '
 		                    + ' You may now access <a href="/auth/restricted">/restricted</a>.';
-		                var returnTo = '/auth/restricted';
-		                if (req.session.returnTo) {
-		                    returnTo = req.session.returnTo;
-		                }
-                        else{
-                            res.json({
-                                status: 'success',
-                                data: {returnTo: returnTo, user: req.session.user}
-                            });
-                            
-                        }
+                        res.json({
+                            status: 'success',
+                            data: {user: req.session.user}
+                        });
 		            });
 		        }
                 else{
