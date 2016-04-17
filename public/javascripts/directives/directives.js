@@ -185,6 +185,7 @@ directives.directive('scrollTo', ['$window', function ($window) {
             scope.scrollTo = function(pos){
                 if(pos === 0){
                     body.scrollTop = 0;
+                    documentElement.scrollTop = 0;
                 }
                 else if(pos === -1){
                     var scrollHeight = Math.max(body.scrollHeight, documentElement.scrollHeight) || 0;
@@ -195,6 +196,9 @@ directives.directive('scrollTo', ['$window', function ($window) {
                         clientHeight = (body.clientHeight > documentElement.clientHeight) ? body.clientHeight: documentElement.clientHeight;  
                     }
                     body.scrollTop = scrollHeight - clientHeight;
+                    if(!body.scrollTop){
+                    	documentElement.scrollTop = scrollHeight - clientHeight;
+                    }
                 }
             }
         }

@@ -335,7 +335,7 @@ a.blog-author{
   overflow: auto;
 }
 .blog .blog-summary{
-      line-height: 4em;
+      line-height: 2.5em;
     font-weight: 600;
     color: gray;
     background-image:-webkit-linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
@@ -385,7 +385,10 @@ img.hover(:hover) {
     -moz-box-shadow: 0 1px 5px rgba(34, 25, 25, .8);
     -webkit-box-shadow: 0 1px 5px rgba(34, 25, 25, .8);
     filter: progid:DXImageTransform.Microsoft.Shadow(color = #979797, direction = 135, strength = 3);
-} 
+}
+img{
+    max-width: 100%;
+}
 
 /* .animatePopUp {
 	-webkit-transform-style: preserve-3d;
@@ -396,16 +399,18 @@ img.hover(:hover) {
 .animate-pop-up.ng-enter,
 .animate-pop-up-enter {
 	-webkit-animation: pop-up-enter .8s ease-in forwards;
+    -moz-animation: pop-up-enter .8s ease-in forwards;
 	animation: pop-up-enter .8s ease-in forwards;
 }
 .animate-pop-up.ng-leave,
 .animate-pop-up-leave {
 	-webkit-animation: pop-up-leave .8s ease-in forwards;
+    -moz-animation: pop-up-leave .8s ease-in forwards;
 	animation: pop-up-leave .8s ease-in forwards;
 }
 @-webkit-keyframes pop-up-enter {
-	0% {-webkit-transform: scale(0.4);transform: scale(0.4);opacity: 0;}
-	70% { -webkit-transform: scale(1.1); opacity: .8; -webkit-animation-timing-function: ease-out; }
+	0% {-webkit-transform: scale(0.4);opacity: 0;}
+	70% { -webkit-transform: scale(1.1); opacity: .8;-webkit-animation-timing-function: ease-out; }
 	100% { -webkit-transform: scale(1); opacity: 1; }
 }
 
@@ -435,19 +440,28 @@ img.hover(:hover) {
 .slide-in.ng-enter,
 .slide-in.ng-leave {
     -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
     transition: all 1s ease;
 }
 .slide-in.ng-enter {
+    -webkit-transform:translateX(100%);
     transform:translateX(100%);
+    -moz-transform:translateX(100%);
 }
 .slide-in.ng-enter-active {
     transform:none;
+    -webkit-transform:none;
+    -moz-transform:none;
 }
 .slide-in.ng-leave {
     transform:none;
+    -webkit-transform:none;
+    -moz-transform:none;
 }
 .slide-in.ng-leave-active {
     transform:translateX(-100%);
+    -webkit-transform:translateX(-100%);
+    -moz-transform:translateX(-100%);
 }
 /* Slide-down */
 .slide-down {
@@ -457,19 +471,28 @@ img.hover(:hover) {
 .slide-down.ng-enter,
 .slide-down.ng-leave {
     -webkit-transition: all 1s ease;
+    -moz-webkit-transition: all 1s ease;
     transition: all 1s ease;
 }
 .slide-down.ng-enter {
     transform:translateY(-100%);
+    -moz-transform:translateY(-100%);
+    -webkit-transform:translateY(-100%);
 }
 .slide-down.ng-enter.ng-enter-active {
     transform:none;
+    -webkit-transform:none;
+    -moz-transform:none;
 }
 .slide-down.ng-leave {
     transform:none;
+    -webkit-transform:none;
+    -moz-transform:none;
 }
 .slide-down.ng-leave.ng-leave-active {
     transform:translateY(100%);
+    -webkit-transform:translateY(100%);
+    -moz-transform:translateY(100%);
 }
 /* ------------------------------------------- */
 /* Slide Rigth 
@@ -566,8 +589,9 @@ img.hover(:hover) {
 }
 .fade.ng-enter,
 .fade.ng-leave {
-    -webkit-transition: all 1.2s ease;
-    transition: all 1.2s ease;
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    transition: all 1s ease;
 }
 .fade.ng-enter {
     opacity: 0;
@@ -584,8 +608,9 @@ img.hover(:hover) {
 
 .fade.ng-hide-add,
 .fade.ng-hide-remove {
-    -webkit-transition: all 1.2s ease;
-    transition: all 1.2s ease;
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    transition: all 1s ease;
 }
 .fade.ng-hide-add {
     opacity: 1;
@@ -604,8 +629,8 @@ img.hover(:hover) {
     transform: perspective(300px) rotateX(0deg);
     -ms-transform: perspective(300px) rotateX(0deg);
     -webkit-transform: perspective(300px) rotateX(0deg);
-    transition-duration: 1.2s;
-    -webkit-transition-duration: 1.2s;
+    transition-duration: 1s;
+    -webkit-transition-duration: 1s;
     opacity: 1;
 }
 /* line 794, ../sass/ng-animation.scss */
@@ -620,8 +645,8 @@ img.hover(:hover) {
     transform: perspective(300px) rotateX(90deg);
     -ms-transform: perspective(300px) rotateX(90deg);
     -webkit-transform: perspective(300px) rotateX(90deg);
-    transition-duration: 1.2s;
-    -webkit-transition-duration: 1.2s;
+    transition-duration: 1s;
+    -webkit-transition-duration: 1s;
     display: block !important;
     opacity: 0;
 }
@@ -637,8 +662,8 @@ img.hover(:hover) {
     transform: perspective(300px) rotateY(0deg);
     -ms-transform: perspective(300px) rotateY(0deg);
     -webkit-transform: perspective(300px) rotateY(0deg);
-    transition-duration: 1.2s;
-    -webkit-transition-duration: 1.2s;
+    transition-duration: 1s;
+    -webkit-transition-duration: 1s;
     opacity: 1;
 }
 /* line 848, ../sass/ng-animation.scss */
@@ -653,8 +678,8 @@ img.hover(:hover) {
     transform: perspective(300px) rotateY(40deg);
     -ms-transform: perspective(300px) rotateY(40deg);
     -webkit-transform: perspective(300px) rotateY(40deg);
-    transition-duration: 1.2s;
-    -webkit-transition-duration: 1.2s;
+    transition-duration: 1s;
+    -webkit-transition-duration: 1s;
     display: block !important;
     opacity: 0;
 }
