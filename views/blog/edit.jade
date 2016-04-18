@@ -56,5 +56,5 @@ div.container.blogCreatePage
                             | isDraft 
                             input(type='checkbox', ng-model='post.isActive')
                             | isActive 
-                        input.pure-button.button-large(type='submit', value='Done', ng-disabled='postForm.title.$dirty && postForm.title.$invalid || postForm.content.$dirty && postForm.content.$invalid || postForm.alias.$dirty && postForm.alias.$invalid')
+                        input.pure-button.button-large(type='submit', value='Done', ng-disabled='postForm.title.$invalid || postForm.content.$invalid || postForm.alias.$invalid')
 div(blog-dialog)

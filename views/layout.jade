@@ -23,6 +23,7 @@ html(lang='zh-CN')
     body(ng-app='mean', ng-controller='ApplicationController', when-scrolled='loadMore()')
         
         block content
+        div(current-message)
         div(auth-dialog)
         script(type='text/javascript', src='/javascripts/vendor/nprogress.js', charset='utf-8')
         script(type='text/javascript', src='/javascripts/vendor/markdown.min.js', charset='utf-8')

@@ -2,7 +2,6 @@
     section.blog-content
         header.blog-content-header
             h1.blog-content-title Login
-            | !{message}
         section.blog-content-body
             form.pure-form.pure-form-aligned(method='post', name='loginForm', ng-submit='login(credentials)', novalidate)
                 fieldset
@@ -18,4 +17,4 @@
                             span(ng-show='loginForm.password.$error.required') 密码是必须的.
                             span(ng-show='loginForm.password.$error.minlength') 不能少于6位字符.
                     .pure-controls
-                        input.pure-button.button-success(type='submit', value='Login', ng-disabled='loginForm.username.$dirty && loginForm.username.$invalid || loginForm.password.$dirty && loginForm.password.$invalid')
+                        input.pure-button.button-success(type='submit', value='Login', ng-disabled='loginForm.username.$invalid || loginForm.password.$invalid')

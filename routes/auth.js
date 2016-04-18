@@ -108,7 +108,6 @@ router.post('/login', function (req, res, next) {
     };
     validator(rules, data, function(err){
     	if(err){
-            err.message = 'Authentication failed, please check your username and password.';
             next(err);
     	}
     	else{

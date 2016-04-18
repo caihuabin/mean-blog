@@ -317,6 +317,16 @@ a {
 .blog-content-subtitle span {
     color: #999;
 }
+.blog-content-source {
+    font-size: 1em;
+    margin: 0;
+    font-weight: normal;
+}
+.blog-content-source a {
+    font-size: .8em;
+    color: #999;
+}
+
 .blog-content-controls {
     margin-top: 2.5em;
     text-align: right;
@@ -344,6 +354,34 @@ a.blog-author{
     background-image:linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
     border-radius: 0.3em;
     padding: 1em;
+}
+
+ .markdown-content pre {
+    padding: 14px;
+    margin: 1em;
+    overflow: auto;
+    line-height: 1.45;
+    background-color: #4e4e4e;
+    border-radius: 3px;
+    color: #fff;
+    border: none;
+    word-wrap: normal;
+}
+.markdown-content code {
+    color: #fff;
+    text-shadow: none;
+    font-family: Consolas,Monaco,'Andale Mono',monospace;
+    direction: ltr;
+    text-align: left;
+    white-space: pre-wrap;
+    word-spacing: normal;
+    word-break: normal;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+}
+.markdown-content ol, .markdown-content ul{
+  list-style: square;
 }
 /*
  * -- HELPER STYLES --
@@ -828,6 +866,49 @@ article.about-content, article.contact-content{
     margin-top:-20px;
     color:white;
 }
+#main{
+  position: relative;
+}
+.alert {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1002;
+    padding: 15px;
+    padding-right: 50px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    width:100%;
+}
+.alert span{
+    position: absolute;
+    right: 0;
+    font-size: 18px;
+    cursor:pointer;
+}
+.alert-error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+.alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+
 @media screen and (max-width: 1250px) {
     .container.blogCreatePage{
         margin-top: 0;

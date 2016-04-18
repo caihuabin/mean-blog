@@ -92,6 +92,11 @@ exports.generateKey = function (prefix, obj) {
     }
     return key;
 };
+/**
+ * 删除对象里值为空的数据
+ * @param obj 该对象
+ * @param callback 回调
+ */
 exports.deObject = function (obj, callback) {
     for(var key in obj){
         if(obj[key] === undefined || obj[key] === null || obj[key] === ''){
@@ -100,7 +105,9 @@ exports.deObject = function (obj, callback) {
     }
     return obj;
 };
-
+/**
+ * 返回上传对象,该上传对象有参数configure，fileHandler
+ */
 exports.upload = (function(){
     var uploadDir, uploadUrl;
     var configure = function(opts){

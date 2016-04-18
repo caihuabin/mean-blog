@@ -1,6 +1,3 @@
-
-// check out https://github.com/tj/node-pwd
-
 /**
  * Module dependencies.
  */

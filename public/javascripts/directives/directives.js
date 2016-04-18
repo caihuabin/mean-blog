@@ -32,6 +32,7 @@ directives.directive('ensureUnique',function($http) {
                 var data = {};
                 var field = attrs.ensureUnique;
                 var index = field.indexOf('.');
+                var modelLastIndex = attrs.ngModel.lastIndexOf('.');
                 var value = {};
                 if( index > -1 ){
                     data['model'] = field.substring(0, index);
@@ -42,6 +43,9 @@ directives.directive('ensureUnique',function($http) {
                     data['field'] = field;
                 }
                 value[data['field']] = eval('scope.' + attrs.ngModel);
+                if(modelLastIndex > -1){
+                    value['_id'] = scope[attrs.ngModel.substring(0, modelLastIndex)]['_id'];
+                }
                 data['value'] = value;
 
                 $http({
@@ -56,6 +60,16 @@ directives.directive('ensureUnique',function($http) {
             });
         }
     };
+});
+directives.directive('currentMessage', function () {
+    return {
+        restrict: 'A',
+        //若直接写在文档会有闪现问题
+        template: '<div class="alert fade alert-{{ currentMessage.data.status }}" ng-if="currentMessage.visible">{{ currentMessage.data.message }}<span class="icon-cancel-circled" ng-click="currentMessage.visible=false"></span></div>',
+        link: function(scope){
+
+        }
+    }
 });
 directives.directive('authDialog', ['AUTH_EVENTS', function (AUTH_EVENTS) {
     return {
@@ -87,7 +101,7 @@ directives.directive('blogDialog', ['CUSTOM_EVENTS', '$sce', function (CUSTOM_EV
     return {
         restrict: 'A',
         template: '<div class="overlay slide-right blog-preview-dialog" ng-show="visible">' + 
-                    '<section class="container" ng-bind-html="previewContent"></section>' + 
+                    '<section class="container markdown-content" ng-bind-html="previewContent"></section>' + 
                     '<nav class="slideshow">' + 
                         '<a ng-click="closeDialog()" class="nav-close">' + 
                             '<span class="icon-eye-off"></span></a></nav></div>',

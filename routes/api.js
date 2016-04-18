@@ -23,7 +23,7 @@ function checkUnique(model, field, data, uniqueId, callback){
                 return callback(null, null);
             }
             else{
-                if(result._id === uniqueId){
+                if(result._id == uniqueId){
                     return callback(null, null);
                 }
                 return callback(null, result);
@@ -37,7 +37,7 @@ function checkUnique(model, field, data, uniqueId, callback){
 router.post('/checkUnique', function (req, res, next) {
     var model = /*'user' || */req.body.model;
     var field = /*'username' || */req.body.field;
-    var uniqueId = req.body.uniqueId || null;
+    var uniqueId = req.body.value._id || null;
     var data = {};
     data[field] = req.body.value[field];
     checkUnique(model, field, data, uniqueId, function(err, user){

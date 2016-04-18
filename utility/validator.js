@@ -24,6 +24,12 @@ var validators = {
         return this[key] && /^[a-zA-Z0-9]*$/.test(this[key]);
     }
 }
+/**
+ * 依据规则验证数据
+ * @param rules 规则
+ * @param data 被验证的对象
+ * @param callback 回调
+ */
 exports.validator = function (rules, data, callback) {
     for(var key in rules){
         var i = 0, rule = rules[key], len = rule.length;

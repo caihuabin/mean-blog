@@ -90,6 +90,7 @@ app.controller('ApplicationController', ['$scope', 'USER_ROLES', 'AuthService', 
     $scope.userRoles = USER_ROLES;
     $scope.isAuthorized = AuthService.isAuthorized;
     $scope.currentRoutePath = '/blog';
+    $scope.currentMessage = {visible: false, data: {status:'info', message: ''}};
     var currentUser = $window.clientUser;
 
     $scope.$on('$routeChangeSuccess', function(evt, next, previous) {
@@ -104,12 +105,20 @@ app.controller('ApplicationController', ['$scope', 'USER_ROLES', 'AuthService', 
     $scope.blogDialog = function(){
         $scope.$broadcast(CUSTOM_EVENTS.blogPreviewOpen);
     };
+    $scope.setCurrentMessage = function(data){
+        $scope.currentMessage.data = data;
+        $scope.currentMessage.visible = true;
+        setTimeout(function(){
+            $scope.currentMessage.visible = false;
+        } , 3000);
+    };
     $scope.setCurrentUser = function (user) {
         $scope.currentUser = user;
     };
     $scope.setBlogCount = function (count) {
         $scope.BlogCount = count;
     };
+
     if(currentUser){
         Session.create(currentUser._id, currentUser._id, currentUser.role);
         $scope.setCurrentUser(currentUser);
@@ -117,18 +126,16 @@ app.controller('ApplicationController', ['$scope', 'USER_ROLES', 'AuthService', 
 }]);
 app.controller('LoginCtrl', ['$scope', '$rootScope', '$location', '$window', 'AuthService', 'AUTH_EVENTS', function($scope, $rootScope, $location, $window, AuthService, AUTH_EVENTS) { 
     $scope.credentials = {username:'', password:''};
+
     $scope.login = function(credentials){
         AuthService.login(credentials).then(function (data) {
             //向下广播
             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, data);
             $scope.setCurrentUser(data.user);
-            /*$location.path(data.returnTo).replace();*/
-        }, function (error) {
-            $rootScope.$broadcast(AUTH_EVENTS.loginFailed, error);
-            console.log(error);
+        }, function (result) {
+            $rootScope.$broadcast(AUTH_EVENTS.loginFailed, result);
+            $scope.setCurrentMessage({status:'error', message: result.data.error});
         });
-        /*$scope.$emit('user:logged_in', data.user);*/
-        /*$window.location.href = data.data.returnTo;*/
     }
 }]);
 app.controller('RegisterCtrl', ['$scope', '$location', '$http', '$rootScope', 'AUTH_EVENTS', function($scope, $location, $http, $rootScope, AUTH_EVENTS) {
@@ -142,8 +149,8 @@ app.controller('RegisterCtrl', ['$scope', '$location', '$http', '$rootScope', 'A
                 , email: $scope.user.email
             }).success(function (data) {
                 $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, data);
-            }).error(function (error) {
-                console.log(data);
+            }).error(function (result) {
+                $scope.setCurrentMessage({status:'error', message: result.error});
             });
     }
 }]);
@@ -168,7 +175,7 @@ app.controller('BlogListCtrl', ['$scope', 'posts', 'CUSTOM_EVENTS', function($sc
                 $scope.$emit(CUSTOM_EVENTS.loaded);
                 NProgress.done();
             });
-        }, 1000);
+        }, 500);
         
     });
 
@@ -192,6 +199,8 @@ app.controller('BlogCreateCtrl', ['$scope', '$location', 'Post', 'CUSTOM_EVENTS'
         $scope.post.$save(function(result) {
             var post = result.data;
             $location.path('/blog/show/' + post._id);
+        }, function(result){
+            $scope.setCurrentMessage({status:'error', message: result.data.error});
         });
     };
 }]);

@@ -2,7 +2,6 @@
     section.blog-content
         header.blog-content-header
             h1.blog-content-title Register
-            | !{message}
         section.blog-content-body
             form.pure-form.pure-form-aligned(method='post', name='registerForm', ng-submit='register()', novalidate)
                 fieldset
@@ -31,4 +30,4 @@
                             span(ng-show='registerForm.password_confirmation.$error.required') 验证密码是必须的.
                             span(ng-show='registerForm.password_confirmation.$error.pwconfirm') 验证密码不匹配.
                     .pure-controls
-                        input.pure-button.pure-button-primary(type='submit', value='Register', ng-disabled='registerForm.username.$dirty && registerForm.username.$invalid || registerForm.password.$dirty && registerForm.password.$invalid || registerForm.password_confirmation.$dirty && registerForm.password_confirmation.$invalid || registerForm.email.$dirty && registerForm.email.$invalid')
+                        input.pure-button.pure-button-primary(type='submit', value='Register', ng-disabled='registerForm.username.$invalid || registerForm.password.$invalid || registerForm.password_confirmation.$invalid || registerForm.email.$invalid')

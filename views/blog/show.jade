@@ -8,6 +8,10 @@
                     a.blog-author {{ post.user.username }} 
                     | at 
                     span {{ post.createdTime }}
+                p.blog-content-source(ng-if='!!post.source')
+                    | From 
+                    a(href='{{ post.url }}') {{ post.source }}
+
             div.blog-content-controls.pure-u-1-2
                 button.secondary-button.pure-button Reply {{ post.replyCount }}
                 button.secondary-button.pure-button View {{ post.viewCount }}
@@ -15,7 +19,7 @@
         section.blog-content-body
             div.blog
                 p.blog-summary {{ post.summary }}
-                div(mark-down, ng-bind-html='previewContent')
+                div.markdown-content(mark-down, ng-bind-html='previewContent')
     nav.slideshow
         a.nav-close(ng-href='/#/blog')
             span.icon-cancel
