@@ -51,11 +51,14 @@ services.factory('AuthService', ['$http', 'Session', function ($http, Session) {
         }
         return (authService.isAuthenticated() && authorizedRoles.indexOf(Session.userRole) !== -1);
     };
+    authService.isAuthor = function (id) {
+        return (authService.isAuthenticated() && Session.userId === id);
+    };
     return authService;
 }]);
 
 services.factory('Post', ['$resource', function($resource) {
-        return $resource('/posts/:id', {id: '@_id'}, { update: { method: 'PUT' } });
+    return $resource('/posts/:id', {id: '@_id'}, { update: { method: 'PUT' } });
 }]);
 
 services.factory('MultiPostLoader', ['Post', '$q', function(Post, $q) {
@@ -77,6 +80,22 @@ services.factory('PostLoader', ['Post', '$route', '$q', function(Post, $route, $
             delay.resolve(post);
         }, function() {
             delay.reject('Unable to fetch post '  + $route.current.params.postId);
+        });
+        return delay.promise;
+    };
+}]);
+
+services.factory('User', ['$resource', function($resource) {
+    return $resource('/users/:id', {id: '@_id'}, { update: { method: 'PUT' } });
+}]);
+
+services.factory('UserLoader', ['User', '$route', '$q', function(User, $route, $q) {
+    return function() {
+        var delay = $q.defer();
+        User.get({id: $route.current.params.userId}, function(user) {
+            delay.resolve(user);
+        }, function() {
+            delay.reject('Unable to fetch user '  + $route.current.params.userId);
         });
         return delay.promise;
     };

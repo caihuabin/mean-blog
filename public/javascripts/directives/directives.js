@@ -65,12 +65,28 @@ directives.directive('currentMessage', function () {
     return {
         restrict: 'A',
         //若直接写在文档会有闪现问题
-        template: '<div class="alert fade alert-{{ currentMessage.data.status }}" ng-if="currentMessage.visible">{{ currentMessage.data.message }}<span class="icon-cancel-circled" ng-click="currentMessage.visible=false"></span></div>',
+        template: '<div class="alert fade alert-{{ currentMessage.data.status }}" ng-show="currentMessage.visible">{{ currentMessage.data.message }}<span class="icon-cancel-circled" ng-click="currentMessage.visible=false"></span></div>',
         link: function(scope){
 
         }
     }
 });
+
+directives.directive('showMessage', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elem, attrs, ctrl){
+            var data = JSON.parse(attrs.showMessage);
+            scope.$watch(attrs.ngModel, function() {
+                if(ctrl.$viewValue === true){
+                    scope.setCurrentMessage(data);
+                }
+            });
+        }
+    }
+});
+
 directives.directive('authDialog', ['AUTH_EVENTS', function (AUTH_EVENTS) {
     return {
         restrict: 'A',

@@ -3,6 +3,7 @@ var router = express.Router();
 
 var userModel = require('../models/user').userModel;
 var hash = require('../utility/hash').hash;
+var restrict = require('../utility/restrict');
 var validator = require('../utility/validator').validator;
 var util = require('util');
 var config = require('../config');
@@ -26,25 +27,8 @@ function authenticate(username, password, fn) {
         });
     });    
 }
-function restrictAuthenticated(req, res, next) {
-    if (req.session.user) {
-        next();
-    } else {
-        var err = new Error('notAuthenticated');
-        err.status = 401;
-        next(err);
-    }
-}
-function restrictAuthorized(req, res, next) {
-    if (req.session.user.role === 'admin') {
-        next();
-    } else {
-        var err = new Error('notAuthorized');
-        err.status = 403;
-        next(err);
-    }
-}
-router.get('/restricted', restrictAuthenticated, function(req, res){
+
+router.get('/restricted', restrict.isAuthenticated, function(req, res){
     res.send('Wahoo! restricted area, click to <a href="/auth/logout">logout</a>');
 });
 router.get('/register', function (req, res, next) {

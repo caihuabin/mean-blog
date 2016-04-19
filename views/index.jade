@@ -26,7 +26,7 @@ block content
 							| Nothing
 					li.pure-menu-heading.menu-item-divided User
 					li.pure-menu-item(ng-if='!!currentUser')
-						a.pure-menu-link
+						a.pure-menu-link(ng-href='/#/user/{{currentUser._id}}')
 							span.label-dark-blue
 							| Welcome, {{ currentUser.username }}
 					li.pure-menu-item(ng-if='!!currentUser')

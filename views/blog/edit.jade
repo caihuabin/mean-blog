@@ -1,8 +1,8 @@
-div.container.blogCreatePage
+div.container.topPage
     section.page
         header.page-header.pure-g
             div.pure-u-1-2
-            div.pure-u-1-2.text-right(style='line-height: 3em;')
+            div.pure-u-1-2.text-right
                 a(ng-click='remove()')
                     span.menu-icon.icon-block
                 div.fileInputContainer(ng-controller='UploaderController')
@@ -52,9 +52,7 @@ div.container.blogCreatePage
                                 a.icon-cancel-circled2.nav-item.nav-cancel(href='javascript:;', ng-click='removeImageDataUrl($index)')
                     .pure-controls
                         label.pure-checkbox(for='isDraft')
-                            input(type='checkbox', ng-model='post.isDraft')
+                            input(type='checkbox', ng-model='post.isDraft', show-message='{"status":"info", "message": "It will be saved as a draft, can be found in your personal home page"}')
                             | isDraft 
-                            input(type='checkbox', ng-model='post.isActive')
-                            | isActive 
                         input.pure-button.button-large(type='submit', value='Done', ng-disabled='postForm.title.$invalid || postForm.content.$invalid || postForm.alias.$invalid')
 div(blog-dialog)

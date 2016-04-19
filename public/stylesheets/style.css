@@ -161,7 +161,7 @@ a {
 	-webkit-box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
 	box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
 	
-	width: 100%;
+	/* width: 100%; */
   	-moz-page-break-inside: avoid;
 	-webkit-column-break-inside: avoid;
 	break-inside: avoid;
@@ -170,11 +170,42 @@ a {
 	background-color: silver;
 	color:white;
 	height:3em;
+  line-height: 3em;
+}
+.page .page-header label{
+  font-size: 1.2em;
 }
 .page .page-content{
 	padding: 1em;
 }
 
+.info-page{
+  margin-right: 1em;
+}
+.user-avatar{
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 1em;
+  margin-bottom: 0.5em;
+}
+.user-avatar img{
+  max-width: 230px;
+  width:100%;
+  
+}
+.form-ul-aligned ul li{
+  height: 36px;
+  
+}
+.acti-page{
+  margin-left: 1em;
+}
+.page-content ul{
+  padding-left: 0;
+}
+.page-content ul.text-left{
+  padding-left: 1em;
+}
 .button-xsmall {
     font-size: 70%;
 }
@@ -289,6 +320,9 @@ a {
 .blog-desc {
     font-size: 80%;
     margin: 0.4em 0;
+}
+.text-center{
+  text-align: center;
 }
 .text-left{
     text-align: left;
@@ -910,11 +944,11 @@ article.about-content, article.contact-content{
 
 
 @media screen and (max-width: 1250px) {
-    .container.blogCreatePage{
+    .container.topPage{
         margin-top: 0;
     }
 }
-@media screen and (max-width: 60em) {
+@media screen and (max-width: 64em) {
 	.waterfall { 
   		column-gap: 0px; 
   		-moz-column-count: 2;
@@ -939,16 +973,19 @@ article.about-content, article.contact-content{
 }
 
 
-@media screen and (max-width: 40em) {
+@media screen and (max-width: 48em) {
 	.waterfall { 
   		column-gap: 0px; 
   		-moz-column-count: 1;
 		-webkit-column-count: 1;
 		column-count: 1;
   	}
+  .overlay.blog-preview-dialog{
+    margin-left: auto;
+  }
 }
 
-@media screen and (max-width: 30em) {
+@media screen and (max-width: 35.5em) {
     .waterfall { 
   		column-gap: 0px; 
   		-moz-column-count: 1;
@@ -964,9 +1001,10 @@ article.about-content, article.contact-content{
     .pure-form .pure-input-2-3{
         width:100%;
     }
-}
-@media (max-width: 48em) {
-  .overlay.blog-preview-dialog{
-    margin-left: auto;
-  }
+    .info-page{
+      margin-right: auto;
+    }
+    .acti-page{
+      margin-left: auto;
+    }
 }

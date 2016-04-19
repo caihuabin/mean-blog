@@ -47,7 +47,19 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'USER_ROLES'
             data: {
                 authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
             }
+        }).when('/user/:userId', {
+            controller: 'UserCtrl',
+            resolve: {
+                user: ["UserLoader", function(UserLoader) {
+                    return UserLoader();
+                }]
+            },
+            templateUrl:'/users/show',
+            data: {
+                authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+            }
         }).otherwise({redirectTo:'/blog'});
+
         $httpProvider.interceptors.push([
             '$injector',
             function ($injector) {
@@ -110,7 +122,7 @@ app.controller('ApplicationController', ['$scope', 'USER_ROLES', 'AuthService', 
         $scope.currentMessage.visible = true;
         setTimeout(function(){
             $scope.currentMessage.visible = false;
-        } , 3000);
+        } , 2000);
     };
     $scope.setCurrentUser = function (user) {
         $scope.currentUser = user;
@@ -198,6 +210,7 @@ app.controller('BlogCreateCtrl', ['$scope', '$location', 'Post', 'CUSTOM_EVENTS'
         $scope.post.user = $scope.currentUser;
         $scope.post.$save(function(result) {
             var post = result.data;
+            $scope.setCurrentMessage({status:'info', message: 'Article has been submitted.It is awaiting moderation.'});
             $location.path('/blog/show/' + post._id);
         }, function(result){
             $scope.setCurrentMessage({status:'error', message: result.data.error});
@@ -226,6 +239,7 @@ app.controller('BlogEditCtrl', ['$scope', '$location', 'post', 'Post', 'CUSTOM_E
     $scope.update = function() {
         $scope.post.$update(function(result) {
             var post = result.data;
+            $scope.setCurrentMessage({status:'info', message: 'Article has been submitted.It is awaiting moderation.'});
             $location.path('/blog/show/' + postId);
         });
     };
@@ -235,6 +249,19 @@ app.controller('BlogEditCtrl', ['$scope', '$location', 'post', 'Post', 'CUSTOM_E
                 $location.path('/blog');
             });
         }
+    };
+}]);
+
+app.controller('UserCtrl', ['$scope', 'User', 'user', 'AuthService', function($scope, User, user, AuthService){
+    $scope.user = new User(user.data);
+    $scope.isAuthor = AuthService.isAuthor($scope.user._id);
+    $scope.editable = false;
+
+    $scope.update = function() {
+        $scope.user.$update(function(result) {
+            $scope.setCurrentMessage({status:'info', message: 'Information has been submitted.'});
+            $scope.editable = false;
+        });
     };
 }]);
 

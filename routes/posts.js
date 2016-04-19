@@ -7,6 +7,7 @@ var redisClient = require('../utility/redisClient');
 var tool = require('../utility/tool');
 var upload = tool.upload;
 var validator = require('../utility/validator').validator;
+var restrict = require('../utility/restrict');
 
 upload.configure({
     uploadDir: path.join(__dirname, '../public/uploads/images/'),
@@ -74,7 +75,7 @@ router.get('/', function (req, res, next) {
 
 
 //保存文章
-router.post('/', function (req, res, next) {
+router.post('/', restrict.isAuthenticated, function (req, res, next) {
     var rules = {
         title: ['required'],
         alias: ['required'],
@@ -113,7 +114,7 @@ router.post('/', function (req, res, next) {
     });
 });
 
-router.put('/:id', function (req, res, next) {
+router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (req, res, next) {
     var params = {
         _id: req.params.id,
         title: req.body.title,
@@ -185,7 +186,7 @@ router.get('/:id', function (req, res, next) {
 });
 
 //删除文章
-router.delete('/:id', function (req, res, next) {
+router.delete('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (req, res, next) {
     postProxy.delete([req.params.id], function (err) {
         if (err) {
             next(err);
@@ -199,7 +200,7 @@ router.delete('/:id', function (req, res, next) {
 });
 
 //还原文章
-router.post('/undo/:id', function (req, res, next) {
+router.post('/undo/:id', restrict.isAuthenticated, restrict.isAdmin, function (req, res, next) {
     postProxy.undo(req.params.id, function (err) {
         if (err) {
             next(err);
@@ -212,7 +213,7 @@ router.post('/undo/:id', function (req, res, next) {
     })
 });
 
-router.post('/upload', function (req, res, next) {
+router.post('/upload', restrict.isAuthenticated, function (req, res, next) {
     upload.fileHandler()(req, res, next);
 });
 

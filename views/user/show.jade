@@ -1,0 +1,45 @@
+div.container.topPage.pure-g
+    div.pure-u-1.pure-u-sm-7-24
+        section.page.info-page(ng-show='!editable')
+            header.page-header
+                div.pure-u-1-2
+                    label Information
+                div.pure-u-1-2.text-right(ng-show='isAuthor')
+                    span.menu-icon.icon-edit(ng-click='editable=true')
+            section.page-content
+                div.pure-u-1.user-avatar
+                    img(alt='no image, can talk', ng-src='{{ user.avatar}}')
+                ul.pure-u-1-3.text-right
+                    li Username
+                    li Email
+                    li Join on
+                ul.pure-u-2-3.text-left
+                    li {{user.username}}
+                    li {{user.email}}
+                    li {{ user.createdTime.substring(0, 10) }}
+        section.page.info-page(ng-show='isAuthor && editable')
+            header.page-header
+                div.pure-u-1-2
+                    label Information
+                div.pure-u-1-2.text-right
+                    span.menu-icon.icon-cancel-circled(ng-click='editable=false')
+            section.page-content
+                div.pure-u-1.user-avatar
+                    img(alt='no image, can talk', ng-src='{{ user.avatar}}')
+                div.pure-u-1
+                    form.pure-form.form-ul-aligned(method='post', name='userForm', ng-submit='update()', novalidate)
+                        ul.pure-u-1-3.text-right
+                            li Username
+                            li Email
+                        ul.pure-u-2-3.text-left
+                            li
+                                input(type='text', name='username', ng-model='user.username', required)
+                            li
+                                input(type='email', name='email', ng-model='user.email', required)
+                        div.text-center
+                            input.pure-button.button-success(type='submit', value='Update', ng-disabled='userForm.username.$invalid || userForm.email.$invalid')                
+    div.pure-u-1.pure-u-sm-17-24
+        section.page.acti-page
+            header.page-header
+                label Activities
+            section.page-content

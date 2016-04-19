@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var restrict = require('../utility/restrict');
+
 router.get('/index', function (req, res, next) {
     res.render('blog/index', {
         title: ' - 全部文章'
@@ -13,13 +15,13 @@ router.get('/show', function (req, res, next) {
     });
 });
 
-router.get('/create', function (req, res, next) {
+router.get('/create', restrict.isAuthenticated, function (req, res, next) {
     res.render('blog/create', {
         title: ' - 新的文章'
     });
 });
 
-router.get('/edit', function (req, res, next) {
+router.get('/edit', restrict.isAuthenticated, function (req, res, next) {
     res.render('blog/edit', {
         title: ' - 编辑文章'
     });

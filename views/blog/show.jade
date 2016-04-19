@@ -1,8 +1,8 @@
 .container
     section.blog-content
         header.blog-content-header.pure-g
-            div.pure-u-1-2
-                h1.blog-content-title {{ post.title }}
+            div.pure-u-2-3
+                h2.blog-content-title {{ post.title }}
                 p.blog-content-subtitle
                     | By 
                     a.blog-author {{ post.user.username }} 
@@ -12,7 +12,7 @@
                     | From 
                     a(href='{{ post.url }}') {{ post.source }}
 
-            div.blog-content-controls.pure-u-1-2
+            div.blog-content-controls.pure-u-1-3
                 button.secondary-button.pure-button Reply {{ post.replyCount }}
                 button.secondary-button.pure-button View {{ post.viewCount }}
                 button.secondary-button.pure-button Vote {{ post.voteCount }}
