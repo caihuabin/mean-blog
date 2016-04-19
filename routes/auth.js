@@ -7,12 +7,6 @@ var validator = require('../utility/validator').validator;
 var util = require('util');
 var config = require('../config');
 
-/*hash('foobar', function(err, salt, hash){
-    if (err) throw err;
-    // store the salt & hash in the "db"
-    users.tj.salt = salt;
-    users.tj.hash = hash;
-});*/
 function authenticate(username, password, fn) {
     if (!module.parent) console.log('authenticating %s:%s', username, password);
     userModel.findOne({"username": username}, function (err, user) {
@@ -32,14 +26,25 @@ function authenticate(username, password, fn) {
         });
     });    
 }
-function restrict(req, res, next) {
+function restrictAuthenticated(req, res, next) {
     if (req.session.user) {
         next();
     } else {
-        res.send('Wahoo! Access denied!, Please to <a href="javascript:;",  ng-click="authDialog()"> Login </a>');
+        var err = new Error('notAuthenticated');
+        err.status = 401;
+        next(err);
     }
 }
-router.get('/restricted', restrict, function(req, res){
+function restrictAuthorized(req, res, next) {
+    if (req.session.user.role === 'admin') {
+        next();
+    } else {
+        var err = new Error('notAuthorized');
+        err.status = 403;
+        next(err);
+    }
+}
+router.get('/restricted', restrictAuthenticated, function(req, res){
     res.send('Wahoo! restricted area, click to <a href="/auth/logout">logout</a>');
 });
 router.get('/register', function (req, res, next) {
