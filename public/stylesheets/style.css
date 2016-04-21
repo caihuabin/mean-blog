@@ -864,6 +864,15 @@ nav.slideshow a.nav-login {
     filter:alpha(opacity=0);
     cursor:pointer;
 }
+
+.user-avatar{
+  position: relative;
+}
+.user-avatar .fileInput{
+  height:100%;
+  width: 100%;
+  
+}
 .menu-icon{
     display: inline-block;
     font-weight: bold;

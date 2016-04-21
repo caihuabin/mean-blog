@@ -4,7 +4,7 @@ div.container.topPage.pure-g
             header.page-header
                 div.pure-u-1-2
                     label Information
-                div.pure-u-1-2.text-right(ng-show='isAuthor')
+                div.pure-u-1-2.text-right(ng-show='isOwner')
                     span.menu-icon.icon-edit(ng-click='editable=true')
             section.page-content
                 div.pure-u-1.user-avatar
@@ -17,15 +17,16 @@ div.container.topPage.pure-g
                     li {{user.username}}
                     li {{user.email}}
                     li {{ user.createdTime.substring(0, 10) }}
-        section.page.info-page(ng-show='isAuthor && editable')
+        section.page.info-page(ng-show='isOwner && editable')
             header.page-header
                 div.pure-u-1-2
                     label Information
                 div.pure-u-1-2.text-right
                     span.menu-icon.icon-cancel-circled(ng-click='editable=false')
             section.page-content
-                div.pure-u-1.user-avatar
-                    img(alt='no image, can talk', ng-src='{{ user.avatar}}')
+                div.pure-u-1.user-avatar(ng-controller='UploaderController')
+                    input#imagesUpload.fileInput(type='file', name='files[]', multiple, file-model='readAndUpload')
+                    img(alt='no image, can talk', ng-controller='IngredientsCtrl', ng-src='{{ imageDataUrlList[0]? imageDataUrlList[0] : user.avatar}}')
                 div.pure-u-1
                     form.pure-form.form-ul-aligned(method='post', name='userForm', ng-submit='update()', novalidate)
                         ul.pure-u-1-3.text-right

@@ -51,7 +51,7 @@ services.factory('AuthService', ['$http', 'Session', function ($http, Session) {
         }
         return (authService.isAuthenticated() && authorizedRoles.indexOf(Session.userRole) !== -1);
     };
-    authService.isAuthor = function (id) {
+    authService.isOwner = function (id) {
         return (authService.isAuthenticated() && Session.userId === id);
     };
     return authService;

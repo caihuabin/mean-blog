@@ -252,11 +252,18 @@ app.controller('BlogEditCtrl', ['$scope', '$location', 'post', 'Post', 'CUSTOM_E
     };
 }]);
 
-app.controller('UserCtrl', ['$scope', 'User', 'user', 'AuthService', function($scope, User, user, AuthService){
+app.controller('UserCtrl', ['$scope', 'User', 'user', 'AuthService', 'CUSTOM_EVENTS', function($scope, User, user, AuthService, CUSTOM_EVENTS){
     $scope.user = new User(user.data);
-    $scope.isAuthor = AuthService.isAuthor($scope.user._id);
+    $scope.isOwner = AuthService.isOwner($scope.user._id);
     $scope.editable = false;
 
+    $scope.imageDataUrlList = [];
+    $scope.$on(CUSTOM_EVENTS.readFilesSuccess, function(args, data){
+        $scope.imageDataUrlList = $scope.imageDataUrlList.concat(data);
+    });
+    $scope.$on(CUSTOM_EVENTS.uploadFilesSuccess, function(args, data){
+        $scope.user.avatar = data[0];
+    });
     $scope.update = function() {
         $scope.user.$update(function(result) {
             $scope.setCurrentMessage({status:'info', message: 'Information has been submitted.'});

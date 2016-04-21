@@ -66,6 +66,7 @@ router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (re
     var params = {
         username: req.body.username,
         email: req.body.email,
+        avatar: req.body.avatar,
         updatedTime: Date.now()
     };
     params = tool.deObject(params);
