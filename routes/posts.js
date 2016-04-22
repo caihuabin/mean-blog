@@ -198,7 +198,24 @@ router.delete('/:id', restrict.isAuthenticated, restrict.isAuthorized, function 
         }
     })
 });
-
+router.put('/vote/:id', restrict.isAuthenticated, function (req, res, next) {
+    var params = {
+        _id: req.params.id,
+        voteCount: req.body.voteCount,
+        voteList: req.body.voteList
+    };
+    params = tool.deObject(params);
+    postProxy.update(params, function (err) {
+        if (err) {
+            next(err);
+        } else {
+            res.json({
+                status: 'success',
+                data: null
+            });
+        }
+    });
+});
 //还原文章
 router.post('/undo/:id', restrict.isAuthenticated, restrict.isAdmin, function (req, res, next) {
     postProxy.undo(req.params.id, function (err) {

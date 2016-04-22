@@ -217,8 +217,27 @@ app.controller('BlogCreateCtrl', ['$scope', '$location', 'Post', 'CUSTOM_EVENTS'
         });
     };
 }]);
-app.controller('BlogShowCtrl', ['$scope', '$location', 'post', function($scope, $location, post) {
-    $scope.post = post.data;
+app.controller('BlogShowCtrl', ['$scope', '$location', 'post', 'Post', 'AuthService', function($scope, $location, post, Post, AuthService) {
+    $scope.post = new Post(post.data);
+
+    $scope.vote = function() {
+        if(AuthService.isAuthenticated() ){
+            
+            if($scope.post.voteList.indexOf($scope.currentUser._id)>-1){
+                $scope.setCurrentMessage({status:'error', message: 'You can not vote twice.'});
+            }
+            else{
+                $scope.post.voteList.push($scope.currentUser._id);
+                ++$scope.post.voteCount;
+                $scope.post.$vote(function(result) {
+                    $scope.setCurrentMessage({status:'info', message: 'Your vote has been submitted.'});
+                });
+            } 
+        }
+        else{
+            $scope.setCurrentMessage({status:'error', message: 'Please sign in your account.'});
+        }
+    };
 }]);
 
 app.controller('BlogEditCtrl', ['$scope', '$location', 'post', 'Post', 'CUSTOM_EVENTS', function($scope, $location, post, Post, CUSTOM_EVENTS) {

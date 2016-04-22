@@ -58,7 +58,7 @@ services.factory('AuthService', ['$http', 'Session', function ($http, Session) {
 }]);
 
 services.factory('Post', ['$resource', function($resource) {
-    return $resource('/posts/:id', {id: '@_id'}, { update: { method: 'PUT' } });
+    return $resource('/posts/:id', {id: '@_id'}, { update: { method: 'PUT' }, vote: { method: 'PUT', url: '/posts/vote/:id' } });
 }]);
 
 services.factory('MultiPostLoader', ['Post', '$q', function(Post, $q) {
