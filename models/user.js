@@ -26,6 +26,8 @@ var userSchema = new mongoose.Schema({
     role: {type: String, default: 'admin'},
     avatar: {type: String, default: "/images/avatar.png"},
     isActive: {type: Boolean, default: true},
+    /*postList: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],*/
+    postList: [],
     //创建时间
     createdTime: {type: Date, default: Date.now()},
     //修改时间

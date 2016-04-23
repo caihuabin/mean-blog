@@ -229,10 +229,10 @@ app.controller('BlogShowCtrl', ['$scope', '$location', 'post', 'Post', 'AuthServ
             else{
                 $scope.post.voteList.push($scope.currentUser._id);
                 ++$scope.post.voteCount;
-                $scope.post.$vote(function(result) {
-                    $scope.setCurrentMessage({status:'info', message: 'Your vote has been submitted.'});
+                Post.vote({ id: $scope.post._id }, $scope.post, function(){
+                    $scope.setCurrentMessage({status:'info', message: 'Your vote has been submitted.'}); 
                 });
-            } 
+            }
         }
         else{
             $scope.setCurrentMessage({status:'error', message: 'Please sign in your account.'});
@@ -254,12 +254,14 @@ app.controller('BlogEditCtrl', ['$scope', '$location', 'post', 'Post', 'CUSTOM_E
         $scope.post.content = $scope.post.content ? $scope.post.content + appendMarkdownStr : appendMarkdownStr;
         $scope.post.imgList = angular.isArray($scope.post.imgList) ? $scope.post.imgList.concat(data) : data;
     });
-    var postId = post.data._id;
     $scope.update = function() {
-        $scope.post.$update(function(result) {
-            var post = result.data;
+        /*$scope.post.$update(function(result) {
             $scope.setCurrentMessage({status:'info', message: 'Article has been submitted.It is awaiting moderation.'});
-            $location.path('/blog/show/' + postId);
+            $location.path('/blog/show/' + post.data._id);
+        });*/
+        Post.update({ id: $scope.post._id }, $scope.post, function(){
+            $scope.setCurrentMessage({status:'info', message: 'Article has been submitted.It is awaiting moderation.'});
+            $location.path('/blog/show/' + $scope.post._id);
         });
     };
     $scope.remove = function() {
@@ -284,7 +286,7 @@ app.controller('UserCtrl', ['$scope', 'User', 'user', 'AuthService', 'CUSTOM_EVE
         $scope.user.avatar = data[0];
     });
     $scope.update = function() {
-        $scope.user.$update(function(result) {
+        User.update({ id: $scope.user._id }, $scope.user, function(){
             $scope.setCurrentMessage({status:'info', message: 'Information has been submitted.'});
             $scope.editable = false;
         });

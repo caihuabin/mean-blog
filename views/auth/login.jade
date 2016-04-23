@@ -9,7 +9,7 @@
                         label(for='username') Username
                         input(type='text', name='username', ng-model='credentials.username', required)
                         span(style='color:red', ng-show='loginForm.username.$dirty && loginForm.username.$invalid')
-                            span(ng-show='loginForm.username.$error.required')用户名必填.
+                            span(ng-show='loginForm.username.$error.required') 用户名必填.
                     .pure-control-group
                         label(for='password') Password
                         input(type='password', name='password', ng-model='credentials.password', ng-minlength='6', required)

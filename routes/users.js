@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var userModel = require('../models/user').userModel;
+var postModel = require('../models/post').postModel;
 var restrict = require('../utility/restrict');
 var tool = require('../utility/tool');
 
@@ -59,8 +60,7 @@ router.get('/:id', function (req, res, next) {
 });
 
 router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (req, res, next) {
-    var _id = req.params.id;
-    if (!_id) {
+    if (!req.params.id) {
         next(new Error('404'));
     }
     var params = {
@@ -71,21 +71,35 @@ router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (re
     };
     params = tool.deObject(params);
 
-    userModel.findById(_id, function (err, user) {
-        if (err) {
-            err.status = 404;
+    userModel.findByIdAndUpdate(req.params.id, { $set: params}, {new :true}, function(err, user){
+        if(err){
             next(err);
         }
-
-        userModel.update({'_id': _id}, params, function (err) {
-            if (err) {
-                next(err);
-            }
-            res.json({
-                status: 'success',
-                data: null
+        else if(!user){
+            next(new Error('user is invalided'));
+        }
+        else{
+            var userParams = {
+                'user.username': user.username,
+                'user.email': user.email,
+                'user.avatar': user.avatar,
+            };
+            var ids = user.postList.map(function(post, index){
+                return post._id;
             });
-        });
+            
+            postModel.update({_id: {$in: ids}}, { $set: userParams}, { multi: true }, function(err){
+                if(err){
+                    next(err);
+                }
+                else{
+                    res.json({
+                        status: 'success',
+                        data: null
+                    });
+                }
+            });
+        }
     });
 });
 

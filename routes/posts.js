@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var postProxy = require('../proxy/post');
+var userModel = require('../models/user').userModel;
 var eventproxy = require('eventproxy');
 var redisClient = require('../utility/redisClient');
 var tool = require('../utility/tool');
@@ -100,16 +101,47 @@ router.post('/', restrict.isAuthenticated, function (req, res, next) {
             next(err);
         }
         else{
-            postProxy.save(params, function (err, post) {
-                if (err) {
+            userModel.findById(params.user._id, function (err, user) {
+                if(err){
                     next(err);
-                } else {
-                    res.json({
-                        status: 'success',
-                        data: post
+                }
+                else if(!user){
+                    next(new Error('user can not be found'));
+                }
+                else{
+                    postProxy.save(params, function (err, post) {
+                        if (err) {
+                            next(err);
+                        } else {
+                            user.postList.push({
+                                _id: post._id, 
+                                alias: post.alias, 
+                                title: post.title,
+                                createdTime: post.createdTime
+                            });
+                            /*$pushAll: {
+                                postList: [{
+                                    _id: post._id, 
+                                    alias: post.alias, 
+                                    title: post.title,
+                                    createdTime: post.createdTime
+                                }]
+                            }*/
+                            user.save(function (err) {
+                                if (err) {
+                                    next(err);
+                                } else {
+                                    res.json({
+                                        status: 'success',
+                                        data: post
+                                    });
+                                }
+                            });
+                        }
                     });
                 }
             });
+            
         }
     });
 });
@@ -135,10 +167,34 @@ router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (re
         if (err) {
             next(err);
         } else {
-            res.json({
-                status: 'success',
-                data: null
+            userModel.findById(req.body.user._id, function(err, user){
+                if(err){
+                    next(err);
+                }
+                else{
+                    var postList = user.postList;
+                    var len = postList.length;
+                    for(var i = 0; i < len; i++){
+                        if(postList[i]['_id'] == params._id){
+                            postList[i]['title'] = params.title;
+                            postList[i]['alias'] = params.alias;
+                            break;
+                        }
+                    }
+                    user.save(function(err){
+                        if(err){
+                            next(err);
+                        }
+                        else{
+                            res.json({
+                                status: 'success',
+                                data: null
+                            });
+                        }
+                    });
+                }
             });
+            
         }
     });
 });

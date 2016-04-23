@@ -3,25 +3,26 @@ var db = require('./db'),
 
 var postSchema = new mongoose.Schema({
     //标题
-    title: {type: String},
+    title: String,
     //文章别名
-    alias: {type: String},
+    alias: String,
     //摘要
-    summary: {type: String},
+    summary: String,
     //来源
-    source: {type: String},
+    source: String,
     //内容
-    content: {type: String},
+    content: String,
     //图片
-    imgList: {type: Array, default: []},
+    imgList: [],
     //标签
-    labels: {type: Array, default: []},
+    labels: [],
     //外链Url
-    url: {type: String},
+    url: String,
     //分类
     category: {type: Object},
     //user
     user: {type: Object},
+    /*user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},*/
     //回复
     replyList: {type: Array, default: []},
     //
