@@ -11,46 +11,49 @@ div.container.topPage
         section.page-content
             form.pure-form.pure-form-aligned(method='post', name='postForm', ng-submit='save()', novalidate)
                 fieldset
-                    .pure-control-group
-                        label(for='title') Title
-                        input.pure-input-2-3(type='text', name='title', placeholder='Title', ng-model='post.title', required)
-                        span(style='color:red', ng-show='postForm.title.$dirty && postForm.title.$invalid')
-                            span(ng-show='postForm.title.$error.required') 标题是必须的.
-                    .pure-control-group
-                        label(for='alias') Alias
-                        input.pure-input-2-3(type='text', name='alias', placeholder='Alias', ng-model='post.alias', ensure-unique='post.alias', required)
-                        span(style='color:red', ng-show='postForm.alias.$dirty && postForm.alias.$invalid')
-                            span(ng-show='postForm.alias.$error.required') 是必须的.
-                            span(ng-show='postForm.alias.$error.unique') 已存在.
-                    .pure-control-group
-                        label(for='summary') Summary
-                        input.pure-input-2-3(type='text', name='summary', placeholder='Summary', ng-model='post.summary')
-                    .pure-control-group
-                        label(for='source') Source
-                        input.pure-input-2-3(type='text', name='source', placeholder='Source', ng-model='post.source')
-                    .pure-control-group
-                        label(for='url') Url
-                        input.pure-input-2-3(type='text', name='url', placeholder='Url', ng-model='post.url')
-                    .pure-control-group
-                        label(for='category') Category
-                        input.pure-input-2-3(type='text', name='category', placeholder='Category', ng-model='post.category')
-                    .pure-control-group
-                        label(for='labels') Labels
-                        input.pure-input-2-3(type='text', name='labels', placeholder='Labels', ng-model='post.labels')
-                    .pure-control-group
-                        label(for='content') Content
-                        textarea.pure-input-2-3(name='content', rows='23', placeholder='Content(markdown)', ng-model='post.content', required)
-                        span(style='color:red', ng-show='postForm.content.$dirty && postForm.content.$invalid')
-                            span(ng-show='postForm.content.$error.required') 是必须的.
-                    div.pure-u-1(ng-controller='IngredientsCtrl')
-                        div.pure-u-1-5.img-box(ng-repeat='imageDataUrl in imageDataUrlList track by $index')
-                            img.pure-img-responsive(ng-src='{{ imageDataUrl }}')
-                            nav
-                                span.icon-ok-circled2.nav-item.nav-ok
-                                a.icon-cancel-circled2.nav-item.nav-cancel(href='javascript:;', ng-click='removeImageDataUrl($index)')
-                    .pure-controls
-                        label.pure-checkbox(for='isDraft')
-                            input(type='checkbox', ng-model='post.isDraft', show-message='{"status":"info", "message": "It will be saved as a draft, can be found in your personal home page"}')
-                            |  isDraft
-                        input.pure-button.button-large(type='submit', value='Done', ng-disabled='postForm.title.$invalid || postForm.content.$invalid || postForm.alias.$invalid')
+                    .pure-g
+                        .pure-u-2-3
+                            .pure-control-group
+                                label(for='title') Title
+                                input.pure-input-2-3(type='text', name='title', placeholder='Title', ng-model='post.title', required)
+                                span(style='color:red', ng-show='postForm.title.$dirty && postForm.title.$invalid')
+                                    span(ng-show='postForm.title.$error.required') 标题是必须的.
+                            .pure-control-group
+                                label(for='alias') Alias
+                                input.pure-input-2-3(type='text', name='alias', placeholder='Alias', ng-model='post.alias', ensure-unique='post.alias', required)
+                                span(style='color:red', ng-show='postForm.alias.$dirty && postForm.alias.$invalid')
+                                    span(ng-show='postForm.alias.$error.required') 是必须的.
+                                    span(ng-show='postForm.alias.$error.unique') 已存在.
+                            .pure-control-group
+                                label(for='content') Content
+                                textarea.pure-input-2-3(name='content', rows='23', placeholder='Content(markdown)', ng-model='post.content', required)
+                                span(style='color:red', ng-show='postForm.content.$dirty && postForm.content.$invalid')
+                                    span(ng-show='postForm.content.$error.required') 是必须的.
+                        .pure-u-1-3
+                            .pure-control-group
+                                label(for='summary') Summary
+                                input.pure-input-2-3(type='text', name='summary', placeholder='Summary', ng-model='post.summary')
+                            .pure-control-group
+                                label(for='source') Source
+                                input.pure-input-2-3(type='text', name='source', placeholder='Source', ng-model='post.source')
+                            .pure-control-group
+                                label(for='url') Url
+                                input.pure-input-2-3(type='text', name='url', placeholder='Url', ng-model='post.url')
+                            .pure-control-group
+                                label(for='category') Category
+                                input.pure-input-2-3(type='text', name='category', placeholder='Category', ng-model='post.category')
+                            .pure-control-group
+                                label(for='labels') Labels
+                                input.pure-input-2-3(type='text', name='labels', placeholder='Labels', ng-model='post.labels')
+                            .pure-controls
+                                label.pure-checkbox(for='isDraft')
+                                    input(type='checkbox', ng-model='post.isDraft', show-message='{"status":"info", "message": "It will be saved as a draft, can be found in your personal home page"}')
+                                    |  isDraft
+                                input.pure-button.button-large(type='submit', value='Done', ng-disabled='postForm.title.$invalid || postForm.content.$invalid || postForm.alias.$invalid')
+                        div.pure-u-1(ng-controller='IngredientsCtrl')
+                            div.pure-u-1-5.img-box(ng-repeat='imageDataUrl in imageDataUrlList track by $index')
+                                img.pure-img-responsive(ng-src='{{ imageDataUrl }}')
+                                nav
+                                    span.icon-ok-circled2.nav-item.nav-ok
+                                    a.icon-cancel-circled2.nav-item.nav-cancel(href='javascript:;', ng-click='removeImageDataUrl($index)')
 div(blog-dialog)

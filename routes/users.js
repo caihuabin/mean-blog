@@ -70,7 +70,7 @@ router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (re
         updatedTime: Date.now()
     };
     params = tool.deObject(params);
-
+    //new:true to return the modified document rather than the original.
     userModel.findByIdAndUpdate(req.params.id, { $set: params}, {new :true}, function(err, user){
         if(err){
             next(err);

@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require('path');
 var postProxy = require('../proxy/post');
 var userModel = require('../models/user').userModel;
+var postModel = require('../models/post').postModel;
 var eventproxy = require('eventproxy');
 var redisClient = require('../utility/redisClient');
 var tool = require('../utility/tool');
@@ -76,7 +77,7 @@ router.get('/', function (req, res, next) {
 
 
 //保存文章
-router.post('/', restrict.isAuthenticated, function (req, res, next) {
+router.post('/', restrict.isAuthenticated, restrict.isAuthorized, function (req, res, next) {
     var rules = {
         title: ['required'],
         alias: ['required'],
@@ -101,45 +102,31 @@ router.post('/', restrict.isAuthenticated, function (req, res, next) {
             next(err);
         }
         else{
-            userModel.findById(params.user._id, function (err, user) {
-                if(err){
-                    next(err);
-                }
-                else if(!user){
-                    next(new Error('user can not be found'));
-                }
+            postModel.create(params, function (err, post) {
+                if (err) next(err);
                 else{
-                    postProxy.save(params, function (err, post) {
-                        if (err) {
+                    var postParams = {
+                        _id: post._id, 
+                        alias: post.alias, 
+                        title: post.title,
+                        createdTime: post.createdTime
+                    };
+                    userModel.findByIdAndUpdate(params.user._id, {$pushAll: {postList:[postParams]}},  {new :true}, function (err, user) {
+                        if(err){
                             next(err);
-                        } else {
-                            user.postList.push({
-                                _id: post._id, 
-                                alias: post.alias, 
-                                title: post.title,
-                                createdTime: post.createdTime
-                            });
-                            /*$pushAll: {
-                                postList: [{
-                                    _id: post._id, 
-                                    alias: post.alias, 
-                                    title: post.title,
-                                    createdTime: post.createdTime
-                                }]
-                            }*/
-                            user.save(function (err) {
-                                if (err) {
-                                    next(err);
-                                } else {
-                                    res.json({
-                                        status: 'success',
-                                        data: post
-                                    });
-                                }
+                        }
+                        else if(!user){
+                            next(new Error('user can not be found'));
+                        }
+                        else{
+                            res.json({
+                                status: 'success',
+                                data: post
                             });
                         }
                     });
                 }
+                
             });
             
         }
@@ -148,7 +135,6 @@ router.post('/', restrict.isAuthenticated, function (req, res, next) {
 
 router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (req, res, next) {
     var params = {
-        _id: req.params.id,
         title: req.body.title,
         alias: req.body.alias,
         summary: req.body.summary,
@@ -163,10 +149,11 @@ router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (re
         updatedTime: Date.now()
     };
     params = tool.deObject(params);
-    postProxy.update(params, function (err) {
-        if (err) {
+    postModel.findByIdAndUpdate(req.params.id, params, function(err){
+        if (err){
             next(err);
-        } else {
+        } 
+        else {
             userModel.findById(req.body.user._id, function(err, user){
                 if(err){
                     next(err);
@@ -194,7 +181,6 @@ router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (re
                     });
                 }
             });
-            
         }
     });
 });
@@ -205,7 +191,7 @@ router.get('/:id', function (req, res, next) {
         res.redirect('/admin/articlemanage');
     }
 
-    postProxy.getById(id, function (err, post) {
+    postModel.findByIdAndUpdate(id, {"$inc": {"viewCount": 1}}, {new :true}, function (err, post) {
         if (err) {
             next(err);
         } else if (!post) {
@@ -243,7 +229,7 @@ router.get('/:id', function (req, res, next) {
 
 //删除文章
 router.delete('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (req, res, next) {
-    postProxy.delete([req.params.id], function (err) {
+    postModel.findByIdAndUpdate(req.params.id, {'softDelete': true}, function (err) {
         if (err) {
             next(err);
         } else {
@@ -252,16 +238,15 @@ router.delete('/:id', restrict.isAuthenticated, restrict.isAuthorized, function 
                 data: null
             });
         }
-    })
+    });
 });
 router.put('/vote/:id', restrict.isAuthenticated, function (req, res, next) {
     var params = {
-        _id: req.params.id,
         voteCount: req.body.voteCount,
         voteList: req.body.voteList
     };
     params = tool.deObject(params);
-    postProxy.update(params, function (err) {
+    postModel.findByIdAndUpdate(req.params.id, params, function (err) {
         if (err) {
             next(err);
         } else {
@@ -274,7 +259,7 @@ router.put('/vote/:id', restrict.isAuthenticated, function (req, res, next) {
 });
 //还原文章
 router.post('/undo/:id', restrict.isAuthenticated, restrict.isAdmin, function (req, res, next) {
-    postProxy.undo(req.params.id, function (err) {
+    postModel.findByIdAndUpdate(req.params.id, {'softDelete': false}, function (err) {
         if (err) {
             next(err);
         } else {
@@ -283,7 +268,7 @@ router.post('/undo/:id', restrict.isAuthenticated, restrict.isAdmin, function (r
                 data: null
             });
         }
-    })
+    });
 });
 
 router.post('/upload', restrict.isAuthenticated, function (req, res, next) {

@@ -959,7 +959,9 @@ article.about-content, article.contact-content{
     background-color: #dff0d8;
     border-color: #d6e9c6;
 }
-
+.page-content .pure-form-aligned .pure-control-group label {
+    width: 6em;
+}
 
 @media screen and (max-width: 1250px) {
     .container.topPage{
