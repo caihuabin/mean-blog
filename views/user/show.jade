@@ -1,5 +1,5 @@
 div.container.topPage.pure-g
-    div.pure-u-1.pure-u-sm-7-24
+    div.pure-u-1.pure-u-md-7-24
         section.page.info-page(ng-show='!editable')
             header.page-header
                 div.pure-u-1-2
@@ -38,9 +38,13 @@ div.container.topPage.pure-g
                             li
                                 input(type='email', name='email', ng-model='user.email', required)
                         div.text-center
-                            input.pure-button.button-success(type='submit', value='Update', ng-disabled='userForm.username.$invalid || userForm.email.$invalid')                
-    div.pure-u-1.pure-u-sm-17-24
+                            input.pure-button.button-success(type='submit', value='Update', ng-disabled='userForm.username.$invalid || userForm.email.$invalid')
+    div.pure-u-1.pure-u-md-17-24
         section.page.acti-page
             header.page-header
                 label Activities
             section.page-content
+                ul
+                    li.cell(ng-repeat='post in user.postList')
+                        a.post-title(ng-href='/#/blog/show/{{ post._id }}') {{post.title}}
+                        span.post-time {{post.createdTime.substring(0,10)}}

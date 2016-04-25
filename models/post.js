@@ -24,13 +24,13 @@ var postSchema = new mongoose.Schema({
     user: {type: Object},
     /*user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},*/
     //回复
-    replyList: {type: Array, default: []},
+    commentList: {type: Array, default: []},
     //
     voteList: {type: Array, default: []},
     //浏览次数
     viewCount: {type: Number, default: 0},
     //
-    replyCount: {type: Number, default: 0},
+    commentCount: {type: Number, default: 0},
     //
     voteCount: {type: Number, default: 0},
     //是否草稿

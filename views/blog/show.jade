@@ -13,13 +13,54 @@
                     a(href='{{ post.url }}') {{ post.source }}
 
             div.blog-content-controls.pure-u-1-3
-                button.secondary-button.pure-button Reply {{ post.replyCount }}
+                button.secondary-button.pure-button Reply {{ post.commentCount }}
                 button.secondary-button.pure-button View {{ post.viewCount }}
                 button.secondary-button.pure-button(ng-click='vote()', class='{{ !!currentUser && post.voteList.indexOf(currentUser._id)===-1 ? "" : "active" }}') Vote {{ post.voteCount }}
         section.blog-content-body
             div.blog
                 p.blog-summary {{ post.summary }}
                 div.markdown-content(mark-down, ng-bind-html='previewContent')
+        footer.blog-content-footer
+            header.blog-comment-header
+            section.blog-comment-content
+                div
+                    div.cell(ng-repeat='comment in post.commentList')
+                    div.cell
+                        div.comment-box
+                            div.avatar
+                                a
+                                    img(src='{{currentUser.avatar}}')
+                            div.detail
+                                div.comment-content.typo fkldsjfkljdfjlkdsjflksddjfklsdlkfjkdslfjlkfsdfkljsdkfjlkadsjkfjksdjklfjsdlkjfklsdjlkfjklsdjflkjskdjfkljsdlkffkljsdklfjksldjflkjsdklfjlskdjfjjsldkfjljsdlfjksldjfkljjijjfisejklfjkldxjvvklsdjfeijfdsfkskdklfklsdjflk
+                                div.comment-info
+                                    span.info-item
+                                        i.icon-user
+                                        a unknown
+                                    span.info-item
+                                        i.icon-timer
+                                        span 2016-04-25
+                                    span.pull-right.action
+                                        i.icon-edit
+                    div.cell
+                        div.comment-box
+                            div.avatar
+                                a
+                                    img(src='{{currentUser.avatar}}')
+                            div.detail
+                                div.comment-content.typo fkldsjfkl
+                                div.comment-info
+                                    span.info-item
+                                        i.icon-user
+                                        a unknown
+                                    span.info-item
+                                        i.icon-timer
+                                        span 2016-04-25
+                                    span.pull-right.action
+                                        i.icon-edit
+                    div.cell
+                        form.pure-form.pure-form-stacked(method='post', name='commentForm', ng-submit='comment()', novalidate)
+                            textarea.pure-input-1(name='content', rows='6', ng-disabled='!currentUser', ng-model='comment.content', required)
+                            input.pure-button.pure-button-primary(type='submit', value='Reply', ng-disabled='commentForm.content.$invalid || !currentUser')
     nav.slideshow
         a.nav-close(ng-href='/#/blog')
             span.icon-cancel

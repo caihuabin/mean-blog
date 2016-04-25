@@ -12,7 +12,7 @@ div.container.topPage
             form.pure-form.pure-form-aligned(method='post', name='postForm', ng-submit='save()', novalidate)
                 fieldset
                     .pure-g
-                        .pure-u-2-3
+                        .pure-u-1.pure-u-md-2-3
                             .pure-control-group
                                 label(for='title') Title
                                 input.pure-input-2-3(type='text', name='title', placeholder='Title', ng-model='post.title', required)
@@ -29,7 +29,7 @@ div.container.topPage
                                 textarea.pure-input-2-3(name='content', rows='23', placeholder='Content(markdown)', ng-model='post.content', required)
                                 span(style='color:red', ng-show='postForm.content.$dirty && postForm.content.$invalid')
                                     span(ng-show='postForm.content.$error.required') 是必须的.
-                        .pure-u-1-3
+                        .pure-u-1.pure-u-md-1-3
                             .pure-control-group
                                 label(for='summary') Summary
                                 input.pure-input-2-3(type='text', name='summary', placeholder='Summary', ng-model='post.summary')

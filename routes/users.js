@@ -42,10 +42,10 @@ router.get('/:id', function (req, res, next) {
                 avatar: user.avatar,
 
                 voteCount: user.voteCount,
-                replyCount: user.replyCount,
+                commentCount: user.commentCount,
 
                 voteList: user.voteList,
-                replyList: user.replyList,
+                commentList: user.commentList,
                 postList: user.postList,
 
                 createdTime: user.createdTime,
