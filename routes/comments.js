@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var userModel = require('../models/comment').commentModel;
+var commentModel = require('../models/comment').commentModel;
 var postModel = require('../models/post').postModel;
 
 var validator = require('../utility/validator').validator;
@@ -29,19 +29,20 @@ router.post('/', restrict.isAuthenticated, restrict.isAuthorized, function (req,
                 if (err) next(err);
                 else{
                     var commentParams = {
+                        _id: comment._id,
                         content: comment.content,
                         user: comment.user,
                         voteCount: comment.voteCount,
                         createdTime: comment.createdTime
                     };
-                    postModel.findByIdAndUpdate(comment.post._id, {'$inc': {'commentCount': 1}, $pushAll: {commentList:[commentParams]}}, {new: true}, function(err, post){
+                    postModel.findByIdAndUpdate(comment.post, {'$inc': {'commentCount': 1}, $pushAll: {commentList:[commentParams]}}, {new: true}, function(err, post){
                         if(err){
                             next(err);
                         }
                         else{
                             res.json({
                                 status: 'success',
-                                data: post
+                                data: commentParams
                             });
                         }
                     });

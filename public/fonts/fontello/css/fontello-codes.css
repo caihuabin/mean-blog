@@ -37,3 +37,12 @@
 .icon-ok-circled:before { content: '\e823'; } /* '' */
 .icon-cancel-circled2:before { content: '\e824'; } /* '' */
 .icon-block:before { content: '\e825'; } /* '' */
+.icon-clock:before { content: '\e826'; } /* '' */
+.icon-stopwatch:before { content: '\e827'; } /* '' */
+.icon-clock-1:before { content: '\e828'; } /* '' */
+.icon-reply:before { content: '\e829'; } /* '' */
+.icon-comment-empty:before { content: '\e82a'; } /* '' */
+.icon-comment:before { content: '\e82b'; } /* '' */
+.icon-comment-1:before { content: '\e82c'; } /* '' */
+.icon-reply-all:before { content: '\e82d'; } /* '' */
+.icon-forward:before { content: '\e82e'; } /* '' */

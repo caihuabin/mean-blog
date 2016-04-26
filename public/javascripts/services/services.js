@@ -101,6 +101,10 @@ services.factory('UserLoader', ['User', '$route', '$q', function(User, $route, $
     };
 }]);
 
+services.factory('Comment', ['$resource', function($resource) {
+    return $resource('/comments/:id', {id: '@_id'}, { update: { method: 'PUT' } });
+}]);
+
 services.factory('fileReader', ["$q", function($q){
     var onLoad = function(reader, deferred, scope) {
         return function () {

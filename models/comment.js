@@ -6,7 +6,7 @@ var commentSchema = new mongoose.Schema({
     content: String,
     post: {type: mongoose.Schema.Types.ObjectId, ref: 'post'},
     //user
-    user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
+    user: {type: Object},
     voteCount: {type: Number, default: 0},
     voteList: {type: Array, default: []},
     //是否软删除
@@ -17,4 +17,4 @@ var commentSchema = new mongoose.Schema({
     updatedTime: {type: Date, default: Date.now()}
 });
 
-exports.postModel = mongoose.model('comment', commentSchema, 'comment');
+exports.commentModel = mongoose.model('comment', commentSchema, 'comment');

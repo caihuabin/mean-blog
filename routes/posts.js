@@ -142,6 +142,7 @@ router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (re
         content: req.body.content,
         imgList: req.body.imgList,
         category: req.body.category,
+        user: req.session.user || req.body.user,
         labels: req.body.labels,
         url: req.body.url,
         isDraft: req.body.isDraft == true,

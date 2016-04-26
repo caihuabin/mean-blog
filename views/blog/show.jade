@@ -24,41 +24,25 @@
             header.blog-comment-header
             section.blog-comment-content
                 div
-                    div.cell(ng-repeat='comment in post.commentList')
-                    div.cell
+                    div.cell.animate-pop-up(ng-repeat='comment in post.commentList')
                         div.comment-box
                             div.avatar
-                                a
-                                    img(src='{{currentUser.avatar}}')
+                                a(ng-href='/#/user/{{comment.user._id}}')
+                                    img(ng-src='{{comment.user.avatar}}')
                             div.detail
-                                div.comment-content.typo fkldsjfkljdfjlkdsjflksddjfklsdlkfjkdslfjlkfsdfkljsdkfjlkadsjkfjksdjklfjsdlkjfklsdjlkfjklsdjflkjskdjfkljsdlkffkljsdklfjksldjflkjsdklfjlskdjfjjsldkfjljsdlfjksldjfkljjijjfisejklfjkldxjvvklsdjfeijfdsfkskdklfklsdjflk
+                                div.comment-content.typo {{comment.content}}
                                 div.comment-info
                                     span.info-item
                                         i.icon-user
-                                        a unknown
+                                        a(ng-href='/#/user/{{comment.user._id}}') {{comment.user.username}}
                                     span.info-item
-                                        i.icon-timer
-                                        span 2016-04-25
+                                        i.icon-clock
+                                        span {{comment.createdTime.substring(0,10)}}
                                     span.pull-right.action
-                                        i.icon-edit
+                                        i.icon-comment-1
+                                        span Reply
                     div.cell
-                        div.comment-box
-                            div.avatar
-                                a
-                                    img(src='{{currentUser.avatar}}')
-                            div.detail
-                                div.comment-content.typo fkldsjfkl
-                                div.comment-info
-                                    span.info-item
-                                        i.icon-user
-                                        a unknown
-                                    span.info-item
-                                        i.icon-timer
-                                        span 2016-04-25
-                                    span.pull-right.action
-                                        i.icon-edit
-                    div.cell
-                        form.pure-form.pure-form-stacked(method='post', name='commentForm', ng-submit='comment()', novalidate)
+                        form.pure-form.pure-form-stacked(method='post', name='commentForm', ng-controller='CommentCtrl', ng-submit='save()', novalidate)
                             textarea.pure-input-1(name='content', rows='6', ng-disabled='!currentUser', ng-model='comment.content', required)
                             input.pure-button.pure-button-primary(type='submit', value='Reply', ng-disabled='commentForm.content.$invalid || !currentUser')
     nav.slideshow

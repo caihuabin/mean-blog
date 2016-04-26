@@ -1,6 +1,6 @@
 var validators = {
     required: function(key){
-        return this[key] && (this[key].length > 0);
+        return !!this[key];
     },
     max: function(key, size){
         return this[key] && (this[key].length <= size);

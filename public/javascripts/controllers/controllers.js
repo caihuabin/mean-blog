@@ -338,3 +338,19 @@ app.controller('IngredientsCtrl', ['$scope', function($scope) {
         $scope.post.imgList.splice(index, 1);
     };
 }]);
+
+app.controller('CommentCtrl', ['$scope', 'Comment', function($scope, Comment) {
+    $scope.comment = new Comment();
+    $scope.save = function() {
+        $scope.comment.user = $scope.currentUser;
+        $scope.comment.post = $scope.post._id;
+        $scope.comment.$save(function(result) {
+            var comment = result.data;
+            $scope.post.commentList.push(comment);
+            ++$scope.post.commentCount;
+            $scope.setCurrentMessage({status:'info', message: 'Comment has been submitted.It is awaiting moderation.'});
+        }, function(result){
+            $scope.setCurrentMessage({status:'error', message: result.data.error});
+        });
+    };
+}]);
