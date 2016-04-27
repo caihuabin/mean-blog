@@ -234,6 +234,16 @@ directives.directive('scrollTo', ['$window', function ($window) {
         }
     }
 }]);
+directives.directive('scrollInto', ['$window', function ($window) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            scope.scrollInto = function(){
+                $window.document.getElementById(attrs.scrollInto).scrollIntoView();
+            }
+        }
+    }
+}]);
 directives.directive('fileModel', ['$parse', 'DOM_EVENTS', function ($parse, DOM_EVENTS) {
     return {
         restrict: 'A',
