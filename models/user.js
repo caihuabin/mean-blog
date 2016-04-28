@@ -2,7 +2,6 @@ var db = require('./db'),
     mongoose = db.mongoose;
 
 var userSchema = new mongoose.Schema({
-    /*_id: {type: mongoose.Schema.Types.ObjectId, unique: true},*/
     username: {
         type: String, 
         unique: true,
@@ -28,9 +27,7 @@ var userSchema = new mongoose.Schema({
     isActive: {type: Boolean, default: true},
     /*postList: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],*/
     postList: [],
-    //创建时间
     createdTime: {type: Date, default: Date.now()},
-    //修改时间
     updatedTime: {type: Date, default: Date.now()}
 });
 

@@ -9,13 +9,9 @@ db.on('error', function (err) {
 });
 exports.mongoose = mongoose;
 
-//基础Schema
 var base = new mongoose.Schema({
-    //唯一键
     /*_id: {type: String, unique: true},*/
-    //创建时间
     createdTime: {type: Date, default: Date.now()},
-    //修改时间
     updatedTime: {type: Date, default: Date.now()}
 });
 exports.base = base;

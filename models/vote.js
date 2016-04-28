@@ -4,9 +4,7 @@ var db = require('./db'),
 var voteSchema = new mongoose.Schema({
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
     target: {id: mongoose.Schema.Types.ObjectId, model: String},
-    //创建时间
     createdTime: {type: Date, default: Date.now()},
-    //修改时间
     updatedTime: {type: Date, default: Date.now()}
 });
 
