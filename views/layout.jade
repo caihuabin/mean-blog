@@ -21,7 +21,7 @@ html(lang='zh-CN')
         script
             | var clientUser = !{ JSON.stringify(clientUser) || 'null' };window.clientUser = clientUser;
         title= 'MEAN-BLOG'
-    body(ng-app='mean', ng-controller='ApplicationController', when-scrolled='loadMore()')
+    body(ng-app='mean', ng-controller='ApplicationController', on-scroll)
         
         block content
         div(current-message)

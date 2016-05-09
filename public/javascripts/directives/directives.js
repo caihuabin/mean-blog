@@ -168,22 +168,25 @@ directives.directive('menuLink', ['$window', 'DOM_EVENTS', function($window, DOM
         }
     };
 }]);
-directives.directive('whenScrolled', ['DOM_EVENTS', 'CUSTOM_EVENTS', '$window', function(DOM_EVENTS, CUSTOM_EVENTS, $window) {
+directives.directive('onScroll', ['DOM_EVENTS', 'CUSTOM_EVENTS', '$window', function(DOM_EVENTS, CUSTOM_EVENTS, $window) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
-            var elem = element[0];
+            //var elem = element[0];
             var documentElement = $window.document.documentElement;
             var body = $window.document.body;
             var bindScroll = function(){
                 IsScrollToBottom() && scope.$broadcast(CUSTOM_EVENTS.loadMore);
             };
-            elem[DOM_EVENTS.onscroll] = bindScroll;
+            //elem[DOM_EVENTS.onscroll] = bindScroll;
+            angular.element($window).bind('scroll', bindScroll);
             scope.$on(CUSTOM_EVENTS.loading, function(){
-                elem[DOM_EVENTS.scroll] = null;
+                //elem[DOM_EVENTS.scroll] = null;
+                angular.element($window).unbind('scroll', bindScroll);
             });
             scope.$on(CUSTOM_EVENTS.loaded, function(){
-                elem[DOM_EVENTS.scroll] = bindScroll;
+                //elem[DOM_EVENTS.scroll] = bindScroll;
+                angular.element($window).bind('scroll', bindScroll);
             });
 
             function IsScrollToBottom() {

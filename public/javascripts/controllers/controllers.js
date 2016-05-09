@@ -122,7 +122,8 @@ app.controller('ApplicationController', ['$scope', 'USER_ROLES', 'AuthService', 
         $scope.currentMessage.visible = true;
         setTimeout(function(){
             $scope.currentMessage.visible = false;
-        } , 2000);
+            $scope.$apply();
+        } , 3000);
     };
     $scope.setCurrentUser = function (user) {
         $scope.currentUser = user;
