@@ -188,7 +188,9 @@ directives.directive('onScroll', ['DOM_EVENTS', 'CUSTOM_EVENTS', '$window', func
                 //elem[DOM_EVENTS.scroll] = bindScroll;
                 angular.element($window).bind('scroll', bindScroll);
             });
-
+            scope.$on('$routeChangeStart', function(evt, next, current) {
+                angular.element($window).unbind('scroll', bindScroll);
+            });
             function IsScrollToBottom() {
                 var scrollTop = 0;  
                 var clientHeight = 0;
