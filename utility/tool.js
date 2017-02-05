@@ -6,7 +6,7 @@ var formidable = require('formidable');
  * @param conditions 查询条件，如 {"name":"value"}
  * @returns {Object} 匹配的JSON对象
  */
-exports.jsonQuery = function (jsonArray, conditions) {
+exports.jsonQuery = function(jsonArray, conditions) {
     var i = 0,
         len = jsonArray.length,
         json,
@@ -33,12 +33,12 @@ exports.jsonQuery = function (jsonArray, conditions) {
  * @param [key] 要读取的配置项key
  * @param callback 回调函数
  */
-exports.getConfig = function (filePath, key, callback) {
-    if(typeof key === 'function'){
+exports.getConfig = function(filePath, key, callback) {
+    if (typeof key === 'function') {
         callback = key;
         key = undefined;
     }
-    fs.readFile(filePath, 'utf8', function (err, file) {
+    fs.readFile(filePath, 'utf8', function(err, file) {
         if (err) {
             console.log('读取文件%s出错：' + err, filePath);
             return callback(err);
@@ -56,8 +56,8 @@ exports.getConfig = function (filePath, key, callback) {
  * @param filePath 文件路径
  * @param setters 要写入的对象
  */
-exports.setConfig = function (filePath, setters) {
-    fs.readFile(filePath, 'utf8', function (err, file) {
+exports.setConfig = function(filePath, setters) {
+    fs.readFile(filePath, 'utf8', function(err, file) {
         var data = JSON.parse(file),
             key;
         for (key in setters) {
@@ -74,7 +74,7 @@ exports.setConfig = function (filePath, setters) {
  * @param obj 待解析对象
  * @returns {string} 拼装的key，带前缀的形如：prefix_name_Tom_age_20，不带前缀的形如：name_Tom_age_20
  */
-exports.generateKey = function (prefix, obj) {
+exports.generateKey = function(prefix, obj) {
     if (typeof prefix === 'object') {
         obj = prefix;
         prefix = undefined;
@@ -97,9 +97,9 @@ exports.generateKey = function (prefix, obj) {
  * @param obj 该对象
  * @param callback 回调
  */
-exports.deObject = function (obj, callback) {
-    for(var key in obj){
-        if(obj[key] === undefined || obj[key] === null || obj[key] === ''){
+exports.deObject = function(obj, callback) {
+    for (var key in obj) {
+        if (obj[key] === undefined || obj[key] === null || obj[key] === '') {
             delete obj[key];
         }
     }
@@ -108,15 +108,15 @@ exports.deObject = function (obj, callback) {
 /**
  * 返回上传对象,该上传对象有参数configure，fileHandler
  */
-exports.upload = (function(){
+exports.upload = (function() {
     var uploadDir, uploadUrl;
-    var configure = function(opts){
+    var configure = function(opts) {
         opts.uploadDir && (uploadDir = opts.uploadDir);
         opts.uploadUrl && (uploadUrl = opts.uploadUrl);
     };
-    var fileHandler = function(){
+    var fileHandler = function() {
         var result = [];
-        var form = new formidable.IncomingForm();   
+        var form = new formidable.IncomingForm();
         form.uploadDir = uploadDir;
         form.maxFieldsSize = 2 * 1024 * 1024;
         form.maxFields = 1000;
@@ -126,13 +126,13 @@ exports.upload = (function(){
         form.on('end', function() {
         });
         */
-        return function(req, res, next){
+        return function(req, res, next) {
             form.parse(req, function(err, fields, files) {
                 if (err) {
                     next(err);
                 }
                 var len = uploadDir.length;
-                for(var key in files){
+                for (var key in files) {
                     result.push(uploadUrl + files[key].path.substring(len));
                 }
                 res.json({

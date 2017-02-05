@@ -17,13 +17,13 @@ function getPostsQuery(params) {
     if (params.searchText) {
         switch (params.filterType) {
             case '1':
-                query.title = {"$regex": params.searchText, "$options": "gi"};
+                query.title = { "$regex": params.searchText, "$options": "gi" };
                 break;
             case '2':
-                query.labels = {"$regex": params.searchText, "$options": "gi"};
+                query.labels = { "$regex": params.searchText, "$options": "gi" };
                 break;
             case '3':
-                query.createdTime = {"$regex": params.searchText, "$options": "gi"};
+                query.createdTime = { "$regex": params.searchText, "$options": "gi" };
                 break;
             default:
                 query.$or = [{
@@ -57,9 +57,9 @@ function getPostsQuery(params) {
  * @param params 参数对象
  * @param callback 回调函数
  */
-exports.getPosts = function (params, callback) {
+exports.getPosts = function(params, callback) {
     var cache_key = tool.generateKey('posts', params);
-    redisClient.getItem(cache_key, function (err, posts) {
+    redisClient.getItem(cache_key, function(err, posts) {
         if (err) {
             return callback(err);
         }
@@ -72,19 +72,18 @@ exports.getPosts = function (params, callback) {
         var options = {};
         options.skip = parseInt(params.skip);
         options.limit = parseInt(params.limit);
-        if(params.sortOrder == 'asc'){
+        if (params.sortOrder == 'asc') {
             options.sort = params.sortName === 'title' ? 'title -createdTime' : '-createdTime';
-        }
-        else{
+        } else {
             options.sort = params.sortName === 'title' ? '-title -createdTime' : '-createdTime';
         }
         var query = getPostsQuery(params);
-        postModel.find(query, {}, options, function (err, posts) {
+        postModel.find(query, {}, options, function(err, posts) {
             if (err) {
                 return callback(err);
             }
             if (posts) {
-                redisClient.setItem(cache_key, posts, redisClient.defaultExpired, function (err) {
+                redisClient.setItem(cache_key, posts, redisClient.defaultExpired, function(err) {
                     if (err) {
                         return callback(err);
                     }
@@ -100,9 +99,9 @@ exports.getPosts = function (params, callback) {
  * @param params 参数对象
  * @param callback 回调函数
  */
-exports.getPostsCount = function (params, callback) {
+exports.getPostsCount = function(params, callback) {
     var cache_key = tool.generateKey('posts_count', params);
-    redisClient.getItem(cache_key, function (err, count) {
+    redisClient.getItem(cache_key, function(err, count) {
         if (err) {
             return callback(err);
         }
@@ -110,11 +109,11 @@ exports.getPostsCount = function (params, callback) {
             return callback(null, count);
         }
         var query = getPostsQuery(params);
-        postModel.count(query, function (err, count) {
+        postModel.count(query, function(err, count) {
             if (err) {
                 return callback(err);
             }
-            redisClient.setItem(cache_key, count, redisClient.defaultExpired, function (err) {
+            redisClient.setItem(cache_key, count, redisClient.defaultExpired, function(err) {
                 if (err) {
                     return callback(err);
                 }
@@ -129,24 +128,24 @@ exports.getPostsCount = function (params, callback) {
  * @param alias 文章alias
  * @param callback 回调函数
  */
-exports.getPostByAlias = function (alias, callback) {
+exports.getPostByAlias = function(alias, callback) {
     var cache_key = 'post_' + alias;
     //此处不需要等待MongoDB的响应，所以不想传一个回调函数，但如果不传回调函数，则必须在调用Query对象上的exec()方法！
     //postModel.update({"Alias": alias}, {"ViewCount": 1}, function () {});
-    postModel.update({"alias": alias}, {"$inc": {"viewCount": 1}}).exec();
-    redisClient.getItem(cache_key, function (err, post) {
+    postModel.update({ "alias": alias }, { "$inc": { "viewCount": 1 } }).exec();
+    redisClient.getItem(cache_key, function(err, post) {
         if (err) {
             return callback(err);
         }
         if (post) {
             return callback(null, post);
         }
-        postModel.findOne({"alias": alias}, function (err, post) {
+        postModel.findOne({ "alias": alias }, function(err, post) {
             if (err) {
                 return callback(err);
             }
             if (post) {
-                redisClient.setItem(cache_key, post, redisClient.defaultExpired, function (err) {
+                redisClient.setItem(cache_key, post, redisClient.defaultExpired, function(err) {
                     if (err) {
                         return callback(err);
                     }

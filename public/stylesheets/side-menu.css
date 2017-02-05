@@ -7,9 +7,11 @@ body {
     height: auto;
 }
 
+
 /*
 Add transition to containers so they can push in and out.
 */
+
 #layout,
 #menu,
 .menu-link {
@@ -20,21 +22,26 @@ Add transition to containers so they can push in and out.
     transition: all 0.2s ease-out;
 }
 
+
 /*
 This is the parent `<div>` that contains the menu and the content area.
 */
+
 #layout {
     position: relative;
     padding-left: 0;
 }
-    #layout.active #menu {
-        left: 150px;
-        width: 150px;
-    }
 
-    #layout.active .menu-link {
-        left: 150px;
-    }
+#layout.active #menu {
+    left: 150px;
+    width: 150px;
+}
+
+#layout.active .menu-link {
+    left: 150px;
+}
+
+
 /*
 The content `<div>` is where all your content goes.
 */
@@ -46,95 +53,120 @@ appears on the left side of the page.
 */
 
 #menu {
-    margin-left: -150px; /* "#menu" width */
+    margin-left: -150px;
+    /* "#menu" width */
     width: 150px;
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
-    z-index: 1000; /* so the menu or its navicon stays above all content */
+    z-index: 1000;
+    /* so the menu or its navicon stays above all content */
     background: rgb(37, 42, 58);
     /* background: rgb(61, 79, 93); */
     /* background: rgb(176, 202, 219); */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
-    /*
+
+
+/*
     All anchors inside the menu should be styled like this.
     */
-    #menu a {
-        color: #ccc;
-        border: none;
-        padding: 0.6em 0 0.6em 0.6em;
-    }
 
-    /*
+#menu a {
+    color: #ccc;
+    border: none;
+    padding: 0.6em 0 0.6em 0.6em;
+}
+
+
+/*
     Remove all background/borders, since we are applying them to #menu.
     */
-     #menu .pure-menu,
-     #menu .pure-menu ul {
-        border: none;
-        background: transparent;
-    }
 
-    /*
+#menu .pure-menu,
+#menu .pure-menu ul {
+    border: none;
+    background: transparent;
+}
+
+
+/*
     Add that light border to separate items into groups.
     */
-    #menu .pure-menu ul,
-    #menu .pure-menu .menu-item-divided {
-        border-top: 1px solid #333;
-    }
-        /*
+
+#menu .pure-menu ul,
+#menu .pure-menu .menu-item-divided {
+    border-top: 1px solid #333;
+}
+
+
+/*
         Change color of the anchor links on hover/focus.
         */
-        #menu .pure-menu li a:hover,
-        #menu .pure-menu li a:focus {
-            background: rgba(0,0,0,0.3);
-            
-        }
 
-    /*
+#menu .pure-menu li a:hover,
+#menu .pure-menu li a:focus {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+
+/*
     This styles the selected menu item `<li>`.
     */
-    #menu .pure-menu-selected{
-        background: rgba(0,0,0,0.5);
-    }
-        /*
+
+#menu .pure-menu-selected {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+
+/*
         This styles a link within a selected menu item `<li>`.
         */
-        #menu .pure-menu-selected a {
-            color: #fff;
-        }
 
-    /*
+#menu .pure-menu-selected a {
+    color: #fff;
+}
+
+
+/*
     This styles the menu heading.
     */
-    #menu .pure-menu-heading {
-        margin: 0;
-        border-bottom: none;
-        font-size: 110%;
-        color: rgb(75, 113, 151);
-    }
+
+#menu .pure-menu-heading {
+    margin: 0;
+    border-bottom: none;
+    font-size: 110%;
+    color: rgb(75, 113, 151);
+}
+
 
 /* -- Dynamic Button For Responsive Menu -------------------------------------*/
+
 
 /*
 The button to open/close the Menu is custom-made and not part of Pure. Here's
 how it works:
 */
 
+
 /*
 `.menu-link` represents the responsive menu toggle that shows/hides on
 small screens.
 */
+
 .menu-link {
     position: fixed;
-    display: block; /* show this only on small screens */
+    display: block;
+    /* show this only on small screens */
     top: 0;
-    left: 0; /* "#menu width" */
+    left: 0;
+    /* "#menu width" */
     background: #000;
-    background: rgba(0,0,0,0.7);
-    font-size: 10px; /* change this value to increase/decrease button size */
+    background: rgba(0, 0, 0, 0.7);
+    font-size: 10px;
+    /* change this value to increase/decrease button size */
     z-index: 10;
     width: 2em;
     height: auto;
@@ -142,57 +174,57 @@ small screens.
     box-sizing: content-box;
 }
 
-    .menu-link:hover,
-    .menu-link:focus {
-        background: #000;
-    }
+.menu-link:hover,
+.menu-link:focus {
+    background: #000;
+}
 
-    .menu-link span {
-        position: relative;
-        display: block;
-    }
+.menu-link span {
+    position: relative;
+    display: block;
+}
 
-    .menu-link span,
-    .menu-link span:before,
-    .menu-link span:after {
-        background-color: #fff;
-        width: 100%;
-        height: 0.2em;
-    }
+.menu-link span,
+.menu-link span:before,
+.menu-link span:after {
+    background-color: #fff;
+    width: 100%;
+    height: 0.2em;
+}
 
-        .menu-link span:before,
-        .menu-link span:after {
-            position: absolute;
-            margin-top: -0.6em;
-            content: " ";
-        }
+.menu-link span:before,
+.menu-link span:after {
+    position: absolute;
+    margin-top: -0.6em;
+    content: " ";
+}
 
-        .menu-link span:after {
-            margin-top: 0.6em;
-        }
+.menu-link span:after {
+    margin-top: 0.6em;
+}
 
 
 /* -- Responsive Styles (Media Queries) ------------------------------------- */
 
+
 /*
 Hides the menu at `48em`, but modify this based on your app's needs.
 */
-@media (min-width: 48em) {
 
+@media (min-width: 48em) {
     #layout {
-        padding-left: 150px; /* left col width "#menu" */
+        padding-left: 150px;
+        /* left col width "#menu" */
         left: 0;
     }
     #menu {
         left: 150px;
     }
-
     .menu-link {
         position: fixed;
         left: 150px;
         display: none;
     }
-
     #layout.active .menu-link {
         left: 150px;
     }
@@ -210,4 +242,3 @@ Hides the menu at `48em`, but modify this based on your app's needs.
         /* left: 150px; */
     }
 }
-

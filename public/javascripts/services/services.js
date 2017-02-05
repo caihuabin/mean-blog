@@ -1,11 +1,10 @@
 'use strict';
 
-var services = angular.module('mean.services',
-    ['ngResource', 'mean.configs']);
+var services = angular.module('mean.services', ['ngResource', 'mean.configs']);
 
-services.factory('AuthInterceptor', ['$rootScope', '$q', 'AUTH_EVENTS', function ($rootScope, $q, AUTH_EVENTS) {
+services.factory('AuthInterceptor', ['$rootScope', '$q', 'AUTH_EVENTS', function($rootScope, $q, AUTH_EVENTS) {
     return {
-        responseError: function (response) {
+        responseError: function(response) {
             $rootScope.$broadcast({
                 401: AUTH_EVENTS.notAuthenticated,
                 403: AUTH_EVENTS.notAuthorized,
@@ -17,13 +16,13 @@ services.factory('AuthInterceptor', ['$rootScope', '$q', 'AUTH_EVENTS', function
     };
 }]);
 
-services.service('Session', function () {
-    this.create = function (sessionId, userId, userRole) {
+services.service('Session', function() {
+    this.create = function(sessionId, userId, userRole) {
         this.id = sessionId;
         this.userId = userId;
         this.userRole = userRole;
     };
-    this.destroy = function () {
+    this.destroy = function() {
         this.id = null;
         this.userId = null;
         this.userRole = null;
@@ -31,34 +30,34 @@ services.service('Session', function () {
     return this;
 });
 
-services.factory('AuthService', ['$http', 'Session', function ($http, Session) {
+services.factory('AuthService', ['$http', 'Session', function($http, Session) {
     var authService = {};
-    authService.login = function (credentials) {
-        return $http.post('/auth/login', credentials).then(function (res) {
+    authService.login = function(credentials) {
+        return $http.post('/auth/login', credentials).then(function(res) {
             var data = res.data.data;
             Session.create(data.user._id, data.user._id, data.user.role);
             return data;
         });
     };
 
-    authService.isAuthenticated = function () {
+    authService.isAuthenticated = function() {
         return !!Session.userId;
     };
 
-    authService.isAuthorized = function (authorizedRoles) {
+    authService.isAuthorized = function(authorizedRoles) {
         if (!angular.isArray(authorizedRoles)) {
             authorizedRoles = [authorizedRoles];
         }
         return (authService.isAuthenticated() && authorizedRoles.indexOf(Session.userRole) !== -1);
     };
-    authService.isOwner = function (id) {
+    authService.isOwner = function(id) {
         return (authService.isAuthenticated() && Session.userId === id);
     };
     return authService;
 }]);
 
 services.factory('Post', ['$resource', function($resource) {
-    return $resource('/posts/:id', {id: '@_id'}, { update: { method: 'PUT' }, vote: { method: 'PUT', url: '/posts/vote/:id' } });
+    return $resource('/posts/:id', { id: '@_id' }, { update: { method: 'PUT' }, vote: { method: 'PUT', url: '/posts/vote/:id' } });
 }]);
 
 services.factory('MultiPostLoader', ['Post', '$q', function(Post, $q) {
@@ -76,46 +75,46 @@ services.factory('MultiPostLoader', ['Post', '$q', function(Post, $q) {
 services.factory('PostLoader', ['Post', '$route', '$q', function(Post, $route, $q) {
     return function() {
         var delay = $q.defer();
-        Post.get({id: $route.current.params.postId}, function(post) {
+        Post.get({ id: $route.current.params.postId }, function(post) {
             delay.resolve(post);
         }, function() {
-            delay.reject('Unable to fetch post '  + $route.current.params.postId);
+            delay.reject('Unable to fetch post ' + $route.current.params.postId);
         });
         return delay.promise;
     };
 }]);
 
 services.factory('User', ['$resource', function($resource) {
-    return $resource('/users/:id', {id: '@_id'}, { update: { method: 'PUT' } });
+    return $resource('/users/:id', { id: '@_id' }, { update: { method: 'PUT' } });
 }]);
 
 services.factory('UserLoader', ['User', '$route', '$q', function(User, $route, $q) {
     return function() {
         var delay = $q.defer();
-        User.get({id: $route.current.params.userId}, function(user) {
+        User.get({ id: $route.current.params.userId }, function(user) {
             delay.resolve(user);
         }, function() {
-            delay.reject('Unable to fetch user '  + $route.current.params.userId);
+            delay.reject('Unable to fetch user ' + $route.current.params.userId);
         });
         return delay.promise;
     };
 }]);
 
 services.factory('Comment', ['$resource', function($resource) {
-    return $resource('/comments/:id', {id: '@_id'}, { update: { method: 'PUT' } });
+    return $resource('/comments/:id', { id: '@_id' }, { update: { method: 'PUT' } });
 }]);
 
-services.factory('fileReader', ["$q", function($q){
+services.factory('fileReader', ["$q", function($q) {
     var onLoad = function(reader, deferred, scope) {
-        return function () {
-            scope.$apply(function () {
+        return function() {
+            scope.$apply(function() {
                 deferred.resolve(reader.result);
             });
         };
     };
-    var onError = function (reader, deferred, scope) {
-        return function () {
-            scope.$apply(function () {
+    var onError = function(reader, deferred, scope) {
+        return function() {
+            scope.$apply(function() {
                 deferred.reject(reader.result);
             });
         };
@@ -126,9 +125,9 @@ services.factory('fileReader', ["$q", function($q){
         reader.onerror = onError(reader, deferred, scope);
         return reader;
     };
-    var readAsDataURL = function (file, scope) {
+    var readAsDataURL = function(file, scope) {
         var deferred = $q.defer();
-        var reader = getReader(deferred, scope);         
+        var reader = getReader(deferred, scope);
         reader.readAsDataURL(file);
         return deferred.promise;
     };
@@ -137,8 +136,8 @@ services.factory('fileReader', ["$q", function($q){
     };
 }]);
 
-services.service('fileUpload', ['$http', function ($http) {
-    this.uploadToUrl = function(url, data){
+services.service('fileUpload', ['$http', function($http) {
+    this.uploadToUrl = function(url, data) {
         var fd = new FormData();
         angular.forEach(data, function(val, key) {
             fd.append(key, val);
@@ -147,10 +146,9 @@ services.service('fileUpload', ['$http', function ($http) {
             method: 'POST',
             url: url,
             data: fd,
-            headers: {'Content-Type': undefined},
+            headers: { 'Content-Type': undefined },
             transformRequest: angular.identity
         };
         return $http(args);
     };
 }]);
-        

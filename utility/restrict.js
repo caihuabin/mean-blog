@@ -10,11 +10,9 @@ exports.isAuthenticated = function(req, res, next) {
 exports.isAuthorized = function(req, res, next) {
     if (req.session.user.role === 'admin') {
         next();
-    }
-    else if(req.body.user && req.body.user._id == req.session.user._id){
+    } else if (req.body.user && req.body.user._id == req.session.user._id) {
         next();
-    }
-    else {
+    } else {
         var err = new Error('notAuthorized');
         err.status = 403;
         next(err);
@@ -23,8 +21,7 @@ exports.isAuthorized = function(req, res, next) {
 exports.isAdmin = function(req, res, next) {
     if (req.session.user.role === 'admin') {
         next();
-    }
-    else {
+    } else {
         var err = new Error('notAuthorized');
         err.status = 403;
         next(err);

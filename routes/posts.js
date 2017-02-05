@@ -16,7 +16,7 @@ upload.configure({
     uploadUrl: '/uploads/images/'
 });
 
-router.get('/', function (req, res, next) {
+router.get('/', function(req, res, next) {
     var ep = new eventproxy(),
         filter,
         params = {
@@ -33,10 +33,10 @@ router.get('/', function (req, res, next) {
         params.userId = filter.userId;
     }
     params = tool.deObject(params);
-    ep.all('posts', 'count', function (posts, count) {
+    ep.all('posts', 'count', function(posts, count) {
         var post,
             result = [];
-        posts.forEach(function (item) {
+        posts.forEach(function(item) {
             post = {
                 _id: item._id,
                 title: item.title,
@@ -58,7 +58,7 @@ router.get('/', function (req, res, next) {
         res.json(result);
     });
 
-    postProxy.getPosts(params, function (err, posts) {
+    postProxy.getPosts(params, function(err, posts) {
         if (err) {
             next(err);
         } else {
@@ -66,7 +66,7 @@ router.get('/', function (req, res, next) {
         }
     });
 
-    postProxy.getPostsCount(params, function (err, count) {
+    postProxy.getPostsCount(params, function(err, count) {
         if (err) {
             next(err);
         } else {
@@ -77,7 +77,7 @@ router.get('/', function (req, res, next) {
 
 
 //保存文章
-router.post('/', restrict.isAuthenticated, restrict.isAuthorized, function (req, res, next) {
+router.post('/', restrict.isAuthenticated, restrict.isAuthorized, function(req, res, next) {
     var rules = {
         title: ['required'],
         alias: ['required'],
@@ -97,28 +97,25 @@ router.post('/', restrict.isAuthenticated, restrict.isAuthorized, function (req,
         isDraft: req.body.isDraft == true
     };
     params = tool.deObject(params);
-    validator(rules, params, function(err){
-        if(err){
+    validator(rules, params, function(err) {
+        if (err) {
             next(err);
-        }
-        else{
-            postModel.create(params, function (err, post) {
+        } else {
+            postModel.create(params, function(err, post) {
                 if (err) next(err);
-                else{
+                else {
                     var postParams = {
-                        _id: post._id, 
-                        alias: post.alias, 
+                        _id: post._id,
+                        alias: post.alias,
                         title: post.title,
                         createdTime: post.createdTime
                     };
-                    userModel.findByIdAndUpdate(params.user._id, {$pushAll: {postList:[postParams]}},  {new :true}, function (err, user) {
-                        if(err){
+                    userModel.findByIdAndUpdate(params.user._id, { $pushAll: { postList: [postParams] } }, { new: true }, function(err, user) {
+                        if (err) {
                             next(err);
-                        }
-                        else if(!user){
+                        } else if (!user) {
                             next(new Error('user can not be found'));
-                        }
-                        else{
+                        } else {
                             res.json({
                                 status: 'success',
                                 data: post
@@ -126,14 +123,14 @@ router.post('/', restrict.isAuthenticated, restrict.isAuthorized, function (req,
                         }
                     });
                 }
-                
+
             });
-            
+
         }
     });
 });
 
-router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (req, res, next) {
+router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function(req, res, next) {
     var params = {
         title: req.body.title,
         alias: req.body.alias,
@@ -150,30 +147,27 @@ router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (re
         updatedTime: Date.now()
     };
     params = tool.deObject(params);
-    postModel.findByIdAndUpdate(req.params.id, params, function(err){
-        if (err){
+    postModel.findByIdAndUpdate(req.params.id, params, function(err) {
+        if (err) {
             next(err);
-        } 
-        else {
-            userModel.findById(req.body.user._id, function(err, user){
-                if(err){
+        } else {
+            userModel.findById(req.body.user._id, function(err, user) {
+                if (err) {
                     next(err);
-                }
-                else{
+                } else {
                     var postList = user.postList;
                     var len = postList.length;
-                    for(var i = 0; i < len; i++){
-                        if(postList[i]['_id'] == params._id){
+                    for (var i = 0; i < len; i++) {
+                        if (postList[i]['_id'] == params._id) {
                             postList[i]['title'] = params.title;
                             postList[i]['alias'] = params.alias;
                             break;
                         }
                     }
-                    user.save(function(err){
-                        if(err){
+                    user.save(function(err) {
+                        if (err) {
                             next(err);
-                        }
-                        else{
+                        } else {
                             res.json({
                                 status: 'success',
                                 data: null
@@ -186,13 +180,13 @@ router.put('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (re
     });
 });
 //
-router.get('/:id', function (req, res, next) {
+router.get('/:id', function(req, res, next) {
     var id = req.params.id;
     if (!id) {
         res.redirect('/admin/articlemanage');
     }
 
-    postModel.findByIdAndUpdate(id, {"$inc": {"viewCount": 1}}, {new :true}, function (err, post) {
+    postModel.findByIdAndUpdate(id, { "$inc": { "viewCount": 1 } }, { new: true }, function(err, post) {
         if (err) {
             next(err);
         } else if (!post) {
@@ -229,8 +223,8 @@ router.get('/:id', function (req, res, next) {
 });
 
 //删除文章
-router.delete('/:id', restrict.isAuthenticated, restrict.isAuthorized, function (req, res, next) {
-    postModel.findByIdAndUpdate(req.params.id, {'softDelete': true}, function (err) {
+router.delete('/:id', restrict.isAuthenticated, restrict.isAuthorized, function(req, res, next) {
+    postModel.findByIdAndUpdate(req.params.id, { 'softDelete': true }, function(err) {
         if (err) {
             next(err);
         } else {
@@ -241,13 +235,13 @@ router.delete('/:id', restrict.isAuthenticated, restrict.isAuthorized, function 
         }
     });
 });
-router.put('/vote/:id', restrict.isAuthenticated, function (req, res, next) {
+router.put('/vote/:id', restrict.isAuthenticated, function(req, res, next) {
     var params = {
         voteCount: req.body.voteCount,
         voteList: req.body.voteList
     };
     params = tool.deObject(params);
-    postModel.findByIdAndUpdate(req.params.id, params, function (err) {
+    postModel.findByIdAndUpdate(req.params.id, params, function(err) {
         if (err) {
             next(err);
         } else {
@@ -259,8 +253,8 @@ router.put('/vote/:id', restrict.isAuthenticated, function (req, res, next) {
     });
 });
 //还原文章
-router.post('/undo/:id', restrict.isAuthenticated, restrict.isAdmin, function (req, res, next) {
-    postModel.findByIdAndUpdate(req.params.id, {'softDelete': false}, function (err) {
+router.post('/undo/:id', restrict.isAuthenticated, restrict.isAdmin, function(req, res, next) {
+    postModel.findByIdAndUpdate(req.params.id, { 'softDelete': false }, function(err) {
         if (err) {
             next(err);
         } else {
@@ -272,7 +266,7 @@ router.post('/undo/:id', restrict.isAuthenticated, restrict.isAdmin, function (r
     });
 });
 
-router.post('/upload', restrict.isAuthenticated, function (req, res, next) {
+router.post('/upload', restrict.isAuthenticated, function(req, res, next) {
     upload.fileHandler()(req, res, next);
 });
 

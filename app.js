@@ -42,15 +42,15 @@ app.use(session({
     },
     secret: config.cookieSecret,
     store: new RedisStore({
-        host: config.RedisHost, 
+        host: config.RedisHost,
         port: config.RedisPort,
-        pass: config.RedisPass, 
-        ttl: config.sessionExpiration, 
-        prefix:'sess'
+        pass: config.RedisPass,
+        ttl: config.sessionExpiration,
+        prefix: 'sess'
     })
 }));
 // Session-persisted message middleware
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
     var err = req.session.error;
     var msg = req.session.success;
     delete req.session.error;

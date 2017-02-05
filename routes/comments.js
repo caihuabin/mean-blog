@@ -8,7 +8,7 @@ var validator = require('../utility/validator').validator;
 var restrict = require('../utility/restrict');
 var tool = require('../utility/tool');
 
-router.post('/', restrict.isAuthenticated, restrict.isAuthorized, function (req, res, next) {
+router.post('/', restrict.isAuthenticated, restrict.isAuthorized, function(req, res, next) {
     var rules = {
         content: ['required'],
         post: ['required'],
@@ -20,14 +20,13 @@ router.post('/', restrict.isAuthenticated, restrict.isAuthorized, function (req,
         user: req.session.user || req.body.user
     };
     params = tool.deObject(params);
-    validator(rules, params, function(err){
-        if(err){
+    validator(rules, params, function(err) {
+        if (err) {
             next(err);
-        }
-        else{
-            commentModel.create(params, function (err, comment) {
+        } else {
+            commentModel.create(params, function(err, comment) {
                 if (err) next(err);
-                else{
+                else {
                     var commentParams = {
                         _id: comment._id,
                         content: comment.content,
@@ -35,11 +34,10 @@ router.post('/', restrict.isAuthenticated, restrict.isAuthorized, function (req,
                         voteCount: comment.voteCount,
                         createdTime: comment.createdTime
                     };
-                    postModel.findByIdAndUpdate(comment.post, {'$inc': {'commentCount': 1}, $pushAll: {commentList:[commentParams]}}, {new: true}, function(err, post){
-                        if(err){
+                    postModel.findByIdAndUpdate(comment.post, { '$inc': { 'commentCount': 1 }, $pushAll: { commentList: [commentParams] } }, { new: true }, function(err, post) {
+                        if (err) {
                             next(err);
-                        }
-                        else{
+                        } else {
                             res.json({
                                 status: 'success',
                                 data: commentParams
@@ -52,13 +50,13 @@ router.post('/', restrict.isAuthenticated, restrict.isAuthorized, function (req,
     });
 });
 
-router.put('/vote/:id', restrict.isAuthenticated, function (req, res, next) {
+router.put('/vote/:id', restrict.isAuthenticated, function(req, res, next) {
     var params = {
         voteCount: req.body.voteCount,
         voteList: req.body.voteList
     };
     params = tool.deObject(params);
-    commentModel.findByIdAndUpdate(req.params.id, params, function (err) {
+    commentModel.findByIdAndUpdate(req.params.id, params, function(err) {
         if (err) {
             next(err);
         } else {
