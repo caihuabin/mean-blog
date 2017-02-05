@@ -41,7 +41,13 @@ app.use(session({
         maxAge: 24 * 60 * 60 * 1000
     },
     secret: config.cookieSecret,
-    store: new RedisStore({host: config.RedisHost, port: config.RedisPort, prefix:'sess'})
+    store: new RedisStore({
+        host: config.RedisHost, 
+        port: config.RedisPort,
+        pass: config.RedisPass, 
+        ttl: config.sessionExpiration, 
+        prefix:'sess'
+    })
 }));
 // Session-persisted message middleware
 app.use(function(req, res, next){

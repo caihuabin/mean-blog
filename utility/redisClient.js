@@ -1,6 +1,6 @@
 var redis = require('redis');
 var config = require('../config');
-var client = redis.createClient(config.RedisPort, config.RedisHost);
+var client = redis.createClient(config.RedisPort, config.RedisHost, {auth_pass: config.RedisPass});
 client.on('error', function (err) {
     console.error('Redis连接错误: ' + err);
     process.exit(1);
